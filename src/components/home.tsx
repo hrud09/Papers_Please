@@ -142,11 +142,6 @@ function Home() {
                 <Languages className="h-4 w-4" />
                 <span>{t("header.language")}</span>
               </Button>
-
-              <Button size="sm" className="bg-green-600 hover:bg-green-700">
-                <Globe className="h-4 w-4 mr-1" />
-                {t("header.getHelp")}
-              </Button>
             </div>
           </div>
         </div>

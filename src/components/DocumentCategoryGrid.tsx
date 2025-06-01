@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,13 +19,14 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import prisma from "@/lib/db";
 
 interface DocumentCategory {
   id: string;
   title: string;
   titleBengali: string;
   description: string;
-  icon: React.ReactNode;
+  icon: string;
   estimatedTime: string;
   officialFee: string;
   popularity: "high" | "medium" | "low";
@@ -36,137 +37,46 @@ interface DocumentCategory {
 
 interface DocumentCategoryGridProps {
   onCategorySelect?: (categoryId: string) => void;
-  categories?: DocumentCategory[];
 }
+
+const iconMap = {
+  FileText: FileText,
+  CreditCard: CreditCard,
+  Users: Users,
+  GraduationCap: GraduationCap,
+  Building: Building,
+  Car: Car,
+  Heart: Heart,
+  Briefcase: Briefcase,
+  Home: Home,
+  Shield: Shield,
+};
 
 const DocumentCategoryGrid = ({
   onCategorySelect = () => {},
-  categories = [
-    {
-      id: "nid",
-      title: "National ID Card",
-      titleBengali: "জাতীয় পরিচয়পত্র",
-      description: "Apply for new NID or update existing information",
-      icon: <CreditCard className="h-6 w-6" />,
-      estimatedTime: "7-15 days",
-      officialFee: "৳50-200",
-      popularity: "high",
-      documents: ["Birth Certificate", "Passport Photo", "Address Proof"],
-      steps: 4,
-      color: "bg-blue-500",
-    },
-    {
-      id: "passport",
-      title: "Passport",
-      titleBengali: "পাসপোর্ট",
-      description: "Apply for new passport or renewal",
-      icon: <FileText className="h-6 w-6" />,
-      estimatedTime: "21-30 days",
-      officialFee: "৳3,000-5,000",
-      popularity: "high",
-      documents: ["NID Card", "Birth Certificate", "Photos"],
-      steps: 6,
-      color: "bg-green-500",
-    },
-    {
-      id: "birth-certificate",
-      title: "Birth Certificate",
-      titleBengali: "জন্ম নিবন্ধন",
-      description: "Register birth or get certified copy",
-      icon: <Users className="h-6 w-6" />,
-      estimatedTime: "1-7 days",
-      officialFee: "৳50-100",
-      popularity: "high",
-      documents: ["Hospital Certificate", "Parent's NID", "Affidavit"],
-      steps: 3,
-      color: "bg-purple-500",
-    },
-    {
-      id: "marriage-certificate",
-      title: "Marriage Certificate",
-      titleBengali: "বিবাহ নিবন্ধন",
-      description: "Register marriage and get certificate",
-      icon: <Heart className="h-6 w-6" />,
-      estimatedTime: "1-3 days",
-      officialFee: "৳50-150",
-      popularity: "medium",
-      documents: ["Both NID Cards", "Photos", "Witnesses"],
-      steps: 4,
-      color: "bg-pink-500",
-    },
-    {
-      id: "driving-license",
-      title: "Driving License",
-      titleBengali: "ড্রাইভিং লাইসেন্স",
-      description: "Apply for new or renew driving license",
-      icon: <Car className="h-6 w-6" />,
-      estimatedTime: "15-30 days",
-      officialFee: "৳1,000-2,000",
-      popularity: "high",
-      documents: ["NID Card", "Medical Certificate", "Photos"],
-      steps: 5,
-      color: "bg-orange-500",
-    },
-    {
-      id: "education-certificate",
-      title: "Education Certificate",
-      titleBengali: "শিক্ষাগত সনদ",
-      description: "Verify and authenticate educational documents",
-      icon: <GraduationCap className="h-6 w-6" />,
-      estimatedTime: "7-14 days",
-      officialFee: "৳200-500",
-      popularity: "medium",
-      documents: ["Original Certificate", "NID Card", "Application"],
-      steps: 3,
-      color: "bg-indigo-500",
-    },
-    {
-      id: "business-license",
-      title: "Business License",
-      titleBengali: "ব্যবসায়িক লাইসেন্স",
-      description: "Register new business or renew license",
-      icon: <Briefcase className="h-6 w-6" />,
-      estimatedTime: "15-45 days",
-      officialFee: "৳500-5,000",
-      popularity: "medium",
-      documents: ["NID Card", "Business Plan", "NOC"],
-      steps: 7,
-      color: "bg-teal-500",
-    },
-    {
-      id: "land-records",
-      title: "Land Records",
-      titleBengali: "ভূমি রেকর্ড",
-      description: "Get land ownership documents and records",
-      icon: <Home className="h-6 w-6" />,
-      estimatedTime: "7-21 days",
-      officialFee: "৳100-1,000",
-      popularity: "medium",
-      documents: ["Previous Deed", "NID Card", "Survey Report"],
-      steps: 5,
-      color: "bg-yellow-500",
-    },
-    {
-      id: "police-clearance",
-      title: "Police Clearance",
-      titleBengali: "পুলিশ ক্লিয়ারেন্স",
-      description: "Get police verification certificate",
-      icon: <Shield className="h-6 w-6" />,
-      estimatedTime: "14-30 days",
-      officialFee: "৳200-500",
-      popularity: "low",
-      documents: ["NID Card", "Passport", "Application"],
-      steps: 4,
-      color: "bg-red-500",
-    },
-  ],
 }: DocumentCategoryGridProps) => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [filter, setFilter] = useState<"all" | "high" | "medium" | "low">(
-    "all",
-  );
+  const [filter, setFilter] = useState<"all" | "high" | "medium" | "low">("all");
+  const [categories, setCategories] = useState<DocumentCategory[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { t } = useLanguage();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        const data = await response.json();
+        setCategories(data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const filteredCategories =
     filter === "all"
@@ -201,6 +111,22 @@ const DocumentCategoryGrid = ({
         };
     }
   };
+
+  const getIconComponent = (iconName: string) => {
+    const IconComponent = iconMap[iconName as keyof typeof iconMap];
+    return IconComponent ? <IconComponent className="h-6 w-6" /> : <FileText className="h-6 w-6" />;
+  };
+
+  if (loading) {
+    return (
+      <div className="w-full max-w-7xl mx-auto bg-white p-6">
+        <div className="text-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading categories...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-7xl mx-auto bg-white p-6">
@@ -261,7 +187,7 @@ const DocumentCategoryGrid = ({
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className={`p-3 rounded-lg ${category.color} text-white`}>
-                  {category.icon}
+                  {getIconComponent(category.icon)}
                 </div>
                 <Badge
                   className={getPopularityBadge(category.popularity).color}
@@ -311,7 +237,7 @@ const DocumentCategoryGrid = ({
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t">
+              <div className="mt-4">
                 <p className="text-xs text-muted-foreground mb-2">
                   {t("category.requiredDocuments")}
                 </p>

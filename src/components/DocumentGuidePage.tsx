@@ -17,6 +17,7 @@ import {
   Building,
   Phone,
   Globe,
+  Languages,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -237,7 +238,7 @@ const documentGuides: Record<string, DocumentGuideData> = {
 const DocumentGuidePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
 
   const guide = id ? documentGuides[id] : null;
 
@@ -266,27 +267,41 @@ const DocumentGuidePage: React.FC = () => {
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center h-16">
-            <Button
-              variant="ghost"
-              onClick={() => navigate("/")}
-              className="mr-4"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              {t("guide.backToHome")}
-            </Button>
-            <div className="flex items-center space-x-3">
-              <div className="bg-primary text-white p-2 rounded-lg">
-                <FileText className="h-6 w-6" />
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center">
+              <Button
+                variant="ghost"
+                onClick={() => navigate("/")}
+                className="mr-4"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                {t("guide.backToHome")}
+              </Button>
+              <div className="flex items-center space-x-3">
+                <div className="bg-primary text-white p-2 rounded-lg">
+                  <FileText className="h-6 w-6" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-primary">
+                    {guide.title}
+                  </h1>
+                  <p className="text-sm text-muted-foreground">
+                    {guide.titleBengali}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-xl font-bold text-primary">
-                  {guide.title}
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  {guide.titleBengali}
-                </p>
-              </div>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setLanguage(language === "en" ? "bn" : "en")}
+                className="flex items-center space-x-1"
+              >
+                <Languages className="h-4 w-4" />
+                <span>{t("header.language")}</span>
+              </Button>
             </div>
           </div>
         </div>
