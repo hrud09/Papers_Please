@@ -77,13 +77,6 @@ function Home() {
     },
   ];
 
-  const emergencyAction = {
-    title: t("instaLaw.title"),
-    description: t("instaLaw.description").substring(0, 60) + "...",
-    icon: <Shield className="h-5 w-5" />,
-    action: () => (window.location.href = "/instalaw"),
-  };
-
   const antiScamTips = [
     {
       title: t("antiScam.officialFees.title"),
@@ -162,24 +155,6 @@ function Home() {
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
             {t("hero.description")}
           </p>
-
-          {/* Emergency Action Card */}
-          <div className="mb-6">
-            <Card
-              className="cursor-pointer hover:shadow-lg transition-shadow bg-gradient-to-r from-red-500 to-orange-500 text-white border-0"
-              onClick={emergencyAction.action}
-            >
-              <CardContent className="p-6 text-center">
-                <div className="bg-white/20 text-white p-3 rounded-full w-fit mx-auto mb-3">
-                  {emergencyAction.icon}
-                </div>
-                <h3 className="font-bold text-lg mb-2">
-                  {emergencyAction.title}
-                </h3>
-                <p className="text-red-100">{emergencyAction.description}</p>
-              </CardContent>
-            </Card>
-          </div>
 
           {/* Quick Action Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
