@@ -77,6 +77,13 @@ function Home() {
     },
   ];
 
+  const emergencyAction = {
+    title: t("lawFirstAid.title"),
+    description: t("lawFirstAid.description").substring(0, 60) + "...",
+    icon: <Shield className="h-5 w-5" />,
+    action: () => (window.location.href = "/law-first-aid"),
+  };
+
   const antiScamTips = [
     {
       title: t("antiScam.officialFees.title"),
@@ -113,6 +120,16 @@ function Home() {
                   {t("header.subtitle")}
                 </p>
               </div>
+              <div className="h-6 w-px bg-gray-300 mx-4" />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => (window.location.href = "/law-first-aid")}
+                className="flex items-center space-x-2 text-red-600 hover:text-red-700 hover:bg-red-50 transition-all duration-200 hover:scale-105 transform"
+              >
+                <Shield className="h-4 w-4" />
+                <span className="font-medium">{t("lawFirstAid.title")}</span>
+              </Button>
             </div>
 
             <div className="flex items-center space-x-4">
@@ -145,6 +162,24 @@ function Home() {
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
             {t("hero.description")}
           </p>
+
+          {/* Emergency Action Card */}
+          <div className="mb-6">
+            <Card
+              className="cursor-pointer hover:shadow-lg transition-shadow bg-gradient-to-r from-red-500 to-orange-500 text-white border-0"
+              onClick={emergencyAction.action}
+            >
+              <CardContent className="p-6 text-center">
+                <div className="bg-white/20 text-white p-3 rounded-full w-fit mx-auto mb-3">
+                  {emergencyAction.icon}
+                </div>
+                <h3 className="font-bold text-lg mb-2">
+                  {emergencyAction.title}
+                </h3>
+                <p className="text-red-100">{emergencyAction.description}</p>
+              </CardContent>
+            </Card>
+          </div>
 
           {/* Quick Action Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
