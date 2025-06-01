@@ -78,10 +78,10 @@ function Home() {
   ];
 
   const emergencyAction = {
-    title: t("lawFirstAid.title"),
-    description: t("lawFirstAid.description").substring(0, 60) + "...",
+    title: t("instaLaw.title"),
+    description: t("instaLaw.description").substring(0, 60) + "...",
     icon: <Shield className="h-5 w-5" />,
-    action: () => (window.location.href = "/law-first-aid"),
+    action: () => (window.location.href = "/instalaw"),
   };
 
   const antiScamTips = [
@@ -124,11 +124,11 @@ function Home() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => (window.location.href = "/law-first-aid")}
-                className="flex items-center space-x-2 text-red-600 hover:text-red-700 hover:bg-red-50 transition-all duration-200 hover:scale-105 transform"
+                onClick={() => (window.location.href = "/instalaw")}
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-all duration-200 hover:scale-105 transform"
               >
                 <Shield className="h-4 w-4" />
-                <span className="font-medium">{t("lawFirstAid.title")}</span>
+                <span className="font-medium">{t("instaLaw.title")}</span>
               </Button>
             </div>
 
