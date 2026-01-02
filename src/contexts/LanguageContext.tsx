@@ -133,6 +133,7 @@ const translations = {
     // Navigation
     "nav.home": "Home",
     "nav.guides": "Guides",
+    "nav.community": "Q&A",
     "nav.profile": "Profile",
 
     // Profile Page
@@ -287,6 +288,7 @@ const translations = {
     // Navigation
     "nav.home": "হোম",
     "nav.guides": "গাইড",
+    "nav.community": "প্রশ্নোত্তর",
     "nav.profile": "প্রোফাইল",
 
     // Profile Page

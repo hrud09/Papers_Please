@@ -18,8 +18,34 @@ import {
   File,
   Eye,
   ChevronRight,
+  Bell,
+  ClipboardList,
+  Clock,
+  CheckCircle2,
+  Calendar,
+  AlertTriangle,
+  History,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
+
+interface ReminderHistory {
+  id: string;
+  documentType: string;
+  documentTypeBn: string;
+  expiryDate: string;
+  status: "upcoming" | "soon" | "expired";
+  daysLeft: number;
+}
+
+interface ChecklistHistory {
+  id: string;
+  documentName: string;
+  documentNameBn: string;
+  completedDate: string;
+  itemsCompleted: number;
+  totalItems: number;
+}
 
 interface SavedDocument {
   id: string;
@@ -42,6 +68,65 @@ interface GovernmentDoc {
 
 const Profile = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+  const { language } = useLanguage();
+
+  // Renewal Reminders History
+  const [reminders] = useState<ReminderHistory[]>([
+    {
+      id: "1",
+      documentType: "Passport",
+      documentTypeBn: "পাসপোর্ট",
+      expiryDate: "2025-06-15",
+      status: "upcoming",
+      daysLeft: 180,
+    },
+    {
+      id: "2",
+      documentType: "Driving License",
+      documentTypeBn: "ড্রাইভিং লাইসেন্স",
+      expiryDate: "2024-12-20",
+      status: "soon",
+      daysLeft: 30,
+    },
+    {
+      id: "3",
+      documentType: "Trade License",
+      documentTypeBn: "ট্রেড লাইসেন্স",
+      expiryDate: "2024-02-01",
+      status: "expired",
+      daysLeft: -10,
+    },
+  ]);
+
+  // Checklist History
+  const [checklistHistory] = useState<ChecklistHistory[]>([
+    {
+      id: "1",
+      documentName: "Passport Application",
+      documentNameBn: "পাসপোর্ট আবেদন",
+      completedDate: "2024-01-10",
+      itemsCompleted: 6,
+      totalItems: 6,
+    },
+    {
+      id: "2",
+      documentName: "NID Correction",
+      documentNameBn: "NID সংশোধন",
+      completedDate: "2024-01-05",
+      itemsCompleted: 4,
+      totalItems: 5,
+    },
+    {
+      id: "3",
+      documentName: "Birth Certificate",
+      documentNameBn: "জন্ম সনদ",
+      completedDate: "2023-12-20",
+      itemsCompleted: 4,
+      totalItems: 4,
+    },
+  ]);
+
   const [savedDocuments, setSavedDocuments] = useState<SavedDocument[]>([
     {
       id: "1",
@@ -107,7 +192,6 @@ const Profile = () => {
   ]);
 
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const { t } = useLanguage();
 
   const categories = [
     { id: "all", labelKey: "profile.filterAll", color: "bg-[#F5CB5C]" },
@@ -240,6 +324,109 @@ const Profile = () => {
               <p className="text-xs text-[#CFDBD5]/60">{t("profile.addNew")}</p>
             </CardContent>
           </Card>
+        </div>
+      </div>
+
+      {/* Renewal Reminders */}
+      <div className="px-4 mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Bell className="h-5 w-5 text-[#F5CB5C]" />
+            <h2 className="text-lg font-semibold text-[#E8EDDF]">
+              {language === "bn" ? "নবায়ন রিমাইন্ডার" : "Renewal Reminders"}
+            </h2>
+          </div>
+        </div>
+        <div className="space-y-2">
+          {reminders.map((reminder) => (
+            <Card key={reminder.id} className="bg-[#333533] border-0 rounded-xl">
+              <CardContent className="p-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                      reminder.status === "expired" ? "bg-red-500/10" :
+                      reminder.status === "soon" ? "bg-orange-500/10" : "bg-green-500/10"
+                    }`}>
+                      {reminder.status === "expired" ? (
+                        <AlertTriangle className={`h-5 w-5 text-red-500`} />
+                      ) : (
+                        <Calendar className={`h-5 w-5 ${
+                          reminder.status === "soon" ? "text-orange-500" : "text-green-500"
+                        }`} />
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-[#E8EDDF] font-medium text-sm">
+                        {language === "bn" ? reminder.documentTypeBn : reminder.documentType}
+                      </p>
+                      <p className="text-xs text-[#CFDBD5]/60">
+                        {language === "bn" ? "মেয়াদ:" : "Expires:"} {reminder.expiryDate}
+                      </p>
+                    </div>
+                  </div>
+                  <div className={`text-sm font-semibold ${
+                    reminder.status === "expired" ? "text-red-500" :
+                    reminder.status === "soon" ? "text-orange-500" : "text-green-500"
+                  }`}>
+                    {reminder.daysLeft > 0 ? (
+                      <>{reminder.daysLeft} {language === "bn" ? "দিন বাকি" : "days"}</>
+                    ) : (
+                      <>{language === "bn" ? "মেয়াদ উত্তীর্ণ!" : "Expired!"}</>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+
+      {/* Checklist History */}
+      <div className="px-4 mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <ClipboardList className="h-5 w-5 text-green-500" />
+            <h2 className="text-lg font-semibold text-[#E8EDDF]">
+              {language === "bn" ? "চেকলিস্ট ইতিহাস" : "Checklist History"}
+            </h2>
+          </div>
+        </div>
+        <div className="space-y-2">
+          {checklistHistory.map((checklist) => (
+            <Card key={checklist.id} className="bg-[#333533] border-0 rounded-xl">
+              <CardContent className="p-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-green-500/10 rounded-xl flex items-center justify-center">
+                      {checklist.itemsCompleted === checklist.totalItems ? (
+                        <CheckCircle2 className="h-5 w-5 text-green-500" />
+                      ) : (
+                        <Clock className="h-5 w-5 text-orange-500" />
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-[#E8EDDF] font-medium text-sm">
+                        {language === "bn" ? checklist.documentNameBn : checklist.documentName}
+                      </p>
+                      <p className="text-xs text-[#CFDBD5]/60">
+                        {checklist.completedDate}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className={`text-sm font-semibold ${
+                      checklist.itemsCompleted === checklist.totalItems ? "text-green-500" : "text-orange-500"
+                    }`}>
+                      {checklist.itemsCompleted}/{checklist.totalItems}
+                    </p>
+                    <p className="text-[10px] text-[#CFDBD5]/50">
+                      {language === "bn" ? "আইটেম" : "items"}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
 

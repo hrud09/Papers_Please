@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { FileText, Home as HomeIcon, User, Languages } from "lucide-react";
+import { FileText, Home as HomeIcon, User, Languages, MessageCircle } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -12,6 +12,7 @@ const DesktopNavigation = () => {
   const navigationLinks = [
     { nameKey: "nav.home", icon: <HomeIcon className="h-4 w-4" />, path: "/" },
     { nameKey: "nav.guides", icon: <FileText className="h-4 w-4" />, path: "/guide/nid" },
+    { nameKey: "nav.community", icon: <MessageCircle className="h-4 w-4" />, path: "/community" },
     { nameKey: "nav.profile", icon: <User className="h-4 w-4" />, path: "/profile" },
   ];
 

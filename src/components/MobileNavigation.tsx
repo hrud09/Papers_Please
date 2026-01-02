@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, FileText, User } from "lucide-react";
+import { Home, FileText, User, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface NavItem {
@@ -17,17 +17,22 @@ const MobileNavigation = () => {
   const navItems: NavItem[] = [
     {
       path: "/",
-      icon: <Home className="h-6 w-6" />,
+      icon: <Home className="h-5 w-5" />,
       labelKey: "nav.home",
     },
     {
       path: "/guide/nid",
-      icon: <FileText className="h-6 w-6" />,
+      icon: <FileText className="h-5 w-5" />,
       labelKey: "nav.guides",
     },
     {
+      path: "/community",
+      icon: <MessageCircle className="h-5 w-5" />,
+      labelKey: "nav.community",
+    },
+    {
       path: "/profile",
-      icon: <User className="h-6 w-6" />,
+      icon: <User className="h-5 w-5" />,
       labelKey: "nav.profile",
     },
   ];

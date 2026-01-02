@@ -31,6 +31,7 @@ import DocumentChecklist from "./DocumentChecklist";
 import TimelineView from "./TimelineView";
 import RejectionReasons from "./RejectionReasons";
 import BrokerFreeGuide from "./BrokerFreeGuide";
+import CommunityQA from "./CommunityQA";
 
 interface DocumentGuideData {
   id: string;
@@ -950,6 +951,9 @@ const DocumentGuidePage: React.FC = () => {
         
         {/* Broker Free Guide */}
         <BrokerFreeGuide documentId={id || "nid"} documentTitle={guide.title} />
+        
+        {/* Community Q&A */}
+        <CommunityQA documentId={id || "nid"} documentTitle={guide.title} />
       </section>
 
       {/* Consultancy Form Section */}

@@ -3,6 +3,8 @@ import { useRoutes, Routes, Route } from "react-router-dom";
 import Home from "./components/home";
 import DocumentGuidePage from "./components/DocumentGuidePage";
 import Profile from "./components/Profile";
+import SmartDocumentFinderPage from "./components/SmartDocumentFinderPage";
+import CommunityQAPage from "./components/CommunityQAPage";
 import MobileNavigation from "./components/MobileNavigation";
 import DesktopNavigation from "./components/DesktopNavigation";
 import { LanguageProvider } from "./contexts/LanguageContext";
@@ -37,6 +39,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/guides" element={<Home />} />
             <Route path="/guide/:id" element={<DocumentGuidePage />} />
+            <Route path="/finder" element={<SmartDocumentFinderPage />} />
+            <Route path="/community" element={<CommunityQAPage />} />
             <Route path="/profile" element={<Profile />} />
           </Routes>
           {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}

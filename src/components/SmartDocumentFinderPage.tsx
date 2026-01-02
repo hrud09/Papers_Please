@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -28,8 +29,9 @@ interface DocumentResult {
   priority: "high" | "medium" | "low";
 }
 
-const SmartDocumentFinder = () => {
+const SmartDocumentFinderPage = () => {
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [results, setResults] = useState<DocumentResult[]>([]);
@@ -187,22 +189,22 @@ const SmartDocumentFinder = () => {
       case 0:
         return (
           <div className="space-y-3">
-            <h3 className="text-[#E8EDDF] font-semibold mb-4">
+            <h3 className="text-[#E8EDDF] font-semibold text-lg mb-4">
               {language === "bn" ? "আপনার উদ্দেশ্য কী?" : "What's your purpose?"}
             </h3>
             {purposes.map((purpose) => (
               <button
                 key={purpose.id}
                 onClick={() => handleAnswer("purpose", purpose.id)}
-                className="w-full flex items-center gap-3 p-4 bg-[#242423] rounded-xl hover:bg-[#242423]/80 active:scale-[0.98] transition-all"
+                className="w-full flex items-center gap-3 p-4 bg-[#333533] rounded-xl hover:bg-[#333533]/80 active:scale-[0.98] transition-all"
               >
-                <div className="w-10 h-10 bg-[#F5CB5C]/10 rounded-xl flex items-center justify-center text-[#F5CB5C]">
+                <div className="w-12 h-12 bg-[#F5CB5C]/10 rounded-xl flex items-center justify-center text-[#F5CB5C]">
                   {purpose.icon}
                 </div>
                 <span className="text-[#E8EDDF] font-medium flex-1 text-left">
                   {language === "bn" ? purpose.labelBn : purpose.label}
                 </span>
-                <ArrowRight className="h-4 w-4 text-[#CFDBD5]/50" />
+                <ArrowRight className="h-5 w-5 text-[#CFDBD5]/50" />
               </button>
             ))}
           </div>
@@ -211,19 +213,19 @@ const SmartDocumentFinder = () => {
       case 1:
         return (
           <div className="space-y-3">
-            <h3 className="text-[#E8EDDF] font-semibold mb-4">
+            <h3 className="text-[#E8EDDF] font-semibold text-lg mb-4">
               {language === "bn" ? "আপনার বয়স কত?" : "What's your age?"}
             </h3>
             {ageGroups.map((age) => (
               <button
                 key={age.id}
                 onClick={() => handleAnswer("age", age.id)}
-                className="w-full flex items-center justify-between p-4 bg-[#242423] rounded-xl hover:bg-[#242423]/80 active:scale-[0.98] transition-all"
+                className="w-full flex items-center justify-between p-4 bg-[#333533] rounded-xl hover:bg-[#333533]/80 active:scale-[0.98] transition-all"
               >
                 <span className="text-[#E8EDDF] font-medium">
                   {language === "bn" ? age.labelBn : age.label}
                 </span>
-                <ArrowRight className="h-4 w-4 text-[#CFDBD5]/50" />
+                <ArrowRight className="h-5 w-5 text-[#CFDBD5]/50" />
               </button>
             ))}
           </div>
@@ -232,19 +234,19 @@ const SmartDocumentFinder = () => {
       case 2:
         return (
           <div className="space-y-3">
-            <h3 className="text-[#E8EDDF] font-semibold mb-4">
+            <h3 className="text-[#E8EDDF] font-semibold text-lg mb-4">
               {language === "bn" ? "আবেদনের ধরন কী?" : "Application type?"}
             </h3>
             {applicationTypes.map((type) => (
               <button
                 key={type.id}
                 onClick={() => handleAnswer("type", type.id)}
-                className="w-full flex items-center justify-between p-4 bg-[#242423] rounded-xl hover:bg-[#242423]/80 active:scale-[0.98] transition-all"
+                className="w-full flex items-center justify-between p-4 bg-[#333533] rounded-xl hover:bg-[#333533]/80 active:scale-[0.98] transition-all"
               >
                 <span className="text-[#E8EDDF] font-medium">
                   {language === "bn" ? type.labelBn : type.label}
                 </span>
-                <ArrowRight className="h-4 w-4 text-[#CFDBD5]/50" />
+                <ArrowRight className="h-5 w-5 text-[#CFDBD5]/50" />
               </button>
             ))}
           </div>
@@ -254,101 +256,136 @@ const SmartDocumentFinder = () => {
         return (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-[#E8EDDF] font-semibold">
+              <h3 className="text-[#E8EDDF] font-semibold text-lg">
                 {language === "bn" ? "আপনার জন্য প্রয়োজনীয় ডকুমেন্ট" : "Recommended Documents"}
               </h3>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={resetFinder}
-                className="text-[#F5CB5C] hover:bg-[#242423] p-2"
+                className="text-[#F5CB5C] hover:bg-[#333533] p-2"
               >
-                <RefreshCw className="h-4 w-4" />
+                <RefreshCw className="h-4 w-4 mr-2" />
+                {language === "bn" ? "আবার শুরু" : "Start Over"}
               </Button>
             </div>
-            {results.map((doc, index) => (
-              <Card key={doc.id} className="bg-[#242423] border-0 rounded-xl overflow-hidden">
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-3">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold ${
-                      doc.priority === "high" ? "bg-[#F5CB5C] text-[#242423]" :
-                      doc.priority === "medium" ? "bg-blue-500/20 text-blue-400" :
-                      "bg-[#333533] text-[#CFDBD5]"
-                    }`}>
-                      {index + 1}
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="text-[#E8EDDF] font-semibold text-sm">{doc.title}</h4>
-                      <p className="text-xs text-[#CFDBD5]/60 mb-2">{doc.titleBengali}</p>
-                      <p className="text-xs text-[#CFDBD5]/70 mb-3">{doc.description}</p>
-                      <div className="flex gap-4">
-                        <div className="flex items-center gap-1.5">
-                          <Clock className="h-3 w-3 text-green-500" />
-                          <span className="text-xs text-[#CFDBD5]/70">{doc.estimatedTime}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <DollarSign className="h-3 w-3 text-[#F5CB5C]" />
-                          <span className="text-xs text-[#CFDBD5]/70">{doc.estimatedCost}</span>
+            {results.length === 0 ? (
+              <div className="text-center py-8">
+                <FileText className="h-12 w-12 text-[#CFDBD5]/30 mx-auto mb-3" />
+                <p className="text-[#CFDBD5]/60">
+                  {language === "bn" ? "কোনো ডকুমেন্ট পাওয়া যায়নি" : "No documents found"}
+                </p>
+              </div>
+            ) : (
+              results.map((doc, index) => (
+                <Card 
+                  key={doc.id} 
+                  className="bg-[#333533] border-0 rounded-xl overflow-hidden cursor-pointer hover:bg-[#333533]/80 active:scale-[0.99] transition-all"
+                  onClick={() => navigate(`/guide/${doc.id}`)}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold ${
+                        doc.priority === "high" ? "bg-[#F5CB5C] text-[#242423]" :
+                        doc.priority === "medium" ? "bg-blue-500/20 text-blue-400" :
+                        "bg-[#242423] text-[#CFDBD5]"
+                      }`}>
+                        {index + 1}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-[#E8EDDF] font-semibold">{doc.title}</h4>
+                        <p className="text-xs text-[#CFDBD5]/60 mb-2">{doc.titleBengali}</p>
+                        <p className="text-sm text-[#CFDBD5]/70 mb-3">{doc.description}</p>
+                        <div className="flex gap-4">
+                          <div className="flex items-center gap-1.5">
+                            <Clock className="h-3.5 w-3.5 text-green-500" />
+                            <span className="text-xs text-[#CFDBD5]/70">{doc.estimatedTime}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <DollarSign className="h-3.5 w-3.5 text-[#F5CB5C]" />
+                            <span className="text-xs text-[#CFDBD5]/70">{doc.estimatedCost}</span>
+                          </div>
                         </div>
                       </div>
+                      <ArrowRight className="h-5 w-5 text-[#F5CB5C]" />
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
         );
     }
   };
 
   return (
-    <Card className="bg-[#333533] border-0 rounded-2xl overflow-hidden">
-      <div className="h-1.5 bg-gradient-to-r from-[#F5CB5C] to-[#F5CB5C]/50" />
-      <CardContent className="p-4">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-[#F5CB5C] rounded-xl flex items-center justify-center">
-            <Sparkles className="h-5 w-5 text-[#242423]" />
-          </div>
-          <div>
-            <h2 className="text-[#E8EDDF] font-bold">
-              {language === "bn" ? "স্মার্ট ডকুমেন্ট ফাইন্ডার" : "Smart Document Finder"}
-            </h2>
-            <p className="text-xs text-[#CFDBD5]/60">
-              {language === "bn" ? "আপনার কোন ডকুমেন্ট দরকার জানুন" : "Find what documents you need"}
-            </p>
-          </div>
-        </div>
-
-        {step > 0 && step < 3 && (
+    <div className="min-h-screen bg-[#242423] pb-24 md:pb-8">
+      {/* Header */}
+      <header className="px-4 pt-6 pb-4 md:pt-20">
+        <div className="flex items-center gap-3">
           <Button
             variant="ghost"
-            size="sm"
-            onClick={() => setStep(step - 1)}
-            className="mb-4 text-[#CFDBD5] hover:bg-[#242423] p-2"
+            onClick={() => navigate("/")}
+            className="p-2.5 bg-[#333533] rounded-xl text-[#CFDBD5] hover:bg-[#333533]/80 active:scale-95 transition-transform"
           >
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            {language === "bn" ? "পেছনে" : "Back"}
+            <ArrowLeft className="h-5 w-5" />
           </Button>
-        )}
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-[#F5CB5C] rounded-xl">
+              <Sparkles className="h-5 w-5 text-[#242423]" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-[#E8EDDF]">
+                {language === "bn" ? "স্মার্ট ডকুমেন্ট ফাইন্ডার" : "Smart Document Finder"}
+              </h1>
+              <p className="text-xs text-[#CFDBD5]/60">
+                {language === "bn" ? "আপনার কোন ডকুমেন্ট দরকার জানুন" : "Find what documents you need"}
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
 
-        {/* Progress indicator */}
-        {step < 3 && (
-          <div className="flex gap-2 mb-4">
+      {/* Progress indicator */}
+      {step < 3 && (
+        <div className="px-4 mb-6">
+          <div className="flex gap-2">
             {[0, 1, 2].map((i) => (
               <div
                 key={i}
-                className={`h-1 flex-1 rounded-full transition-all ${
-                  i <= step ? "bg-[#F5CB5C]" : "bg-[#242423]"
+                className={`h-1.5 flex-1 rounded-full transition-all ${
+                  i <= step ? "bg-[#F5CB5C]" : "bg-[#333533]"
                 }`}
               />
             ))}
           </div>
-        )}
+          <p className="text-xs text-[#CFDBD5]/50 mt-2 text-center">
+            {language === "bn" ? `ধাপ ${step + 1}/৩` : `Step ${step + 1} of 3`}
+          </p>
+        </div>
+      )}
 
+      {/* Back Button for steps */}
+      {step > 0 && step < 3 && (
+        <div className="px-4 mb-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setStep(step - 1)}
+            className="text-[#CFDBD5] hover:bg-[#333533] p-2"
+          >
+            <ArrowLeft className="h-4 w-4 mr-1" />
+            {language === "bn" ? "পেছনে" : "Back"}
+          </Button>
+        </div>
+      )}
+
+      {/* Main Content */}
+      <section className="px-4">
         {renderStep()}
-      </CardContent>
-    </Card>
+      </section>
+    </div>
   );
 };
 
-export default SmartDocumentFinder;
+export default SmartDocumentFinderPage;
