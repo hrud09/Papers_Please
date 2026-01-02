@@ -63,11 +63,6 @@ function Home() {
         </Card>
       </section>
 
-      {/* Emergency Guide */}
-      <section className="px-4 mb-6">
-        <EmergencyGuide />
-      </section>
-
       {/* Document Guides Section */}
       <section className="px-4 mb-6">
         <div className="flex items-center justify-between mb-4">
@@ -77,53 +72,6 @@ function Home() {
         <DocumentCategoryGrid
           onCategorySelect={(id) => navigate(`/guide/${id}`)}
         />
-      </section>
-
-      {/* Two Column Layout for Desktop */}
-      <div className="px-4 grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {/* Renewal Reminders */}
-        <RenewalReminder />
-        
-        {/* Office Finder */}
-        <OfficeFinder />
-      </div>
-
-      {/* Document Comparison */}
-      <section className="px-4 mb-6">
-        <DocumentComparison />
-      </section>
-
-      {/* Verified Links */}
-      <section className="px-4 mb-6">
-        <VerifiedLinks />
-      </section>
-
-      {/* Community Q&A Card - Links to page */}
-      <section className="px-4 mb-6">
-        <Card 
-          className="bg-[#333533] border-0 rounded-2xl overflow-hidden cursor-pointer hover:bg-[#333533]/80 active:scale-[0.99] transition-all"
-          onClick={() => navigate("/community")}
-        >
-          <div className="h-1.5 bg-gradient-to-r from-purple-500 to-purple-500/50" />
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                  <MessageCircle className="h-6 w-6 text-purple-500" />
-                </div>
-                <div>
-                  <h2 className="text-[#E8EDDF] font-bold">
-                    {language === "bn" ? "কমিউনিটি প্রশ্নোত্তর" : "Community Q&A"}
-                  </h2>
-                  <p className="text-xs text-[#CFDBD5]/60">
-                    {language === "bn" ? "বাস্তব অভিজ্ঞতা থেকে শিখুন" : "Learn from real experiences"}
-                  </p>
-                </div>
-              </div>
-              <ArrowRight className="h-5 w-5 text-purple-500" />
-            </div>
-          </CardContent>
-        </Card>
       </section>
     </div>
   );
