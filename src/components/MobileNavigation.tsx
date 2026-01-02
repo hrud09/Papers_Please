@@ -1,32 +1,34 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Home, FileText, User } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface NavItem {
   path: string;
   icon: React.ReactNode;
-  label: string;
+  labelKey: string;
 }
 
 const MobileNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useLanguage();
 
   const navItems: NavItem[] = [
     {
       path: "/",
       icon: <Home className="h-6 w-6" />,
-      label: "Home",
+      labelKey: "nav.home",
     },
     {
       path: "/guide/nid",
       icon: <FileText className="h-6 w-6" />,
-      label: "Guides",
+      labelKey: "nav.guides",
     },
     {
       path: "/profile",
       icon: <User className="h-6 w-6" />,
-      label: "Profile",
+      labelKey: "nav.profile",
     },
   ];
 
@@ -35,7 +37,7 @@ const MobileNavigation = () => {
       <div className="bg-[#242423] border-t border-[#333533] px-6 py-2 pb-safe">
         <div className="flex items-center justify-around">
           {navItems.map((item) => {
-            const isActive = location.pathname === item.path || (item.label === "Guides" && location.pathname.startsWith("/guide"));
+            const isActive = location.pathname === item.path || (item.labelKey === "nav.guides" && location.pathname.startsWith("/guide"));
             return (
               <button
                 key={item.path}
@@ -47,7 +49,7 @@ const MobileNavigation = () => {
                 }`}
               >
                 {item.icon}
-                <span className="text-xs mt-1 font-medium">{item.label}</span>
+                <span className="text-xs mt-1 font-medium">{t(item.labelKey)}</span>
               </button>
             );
           })}

@@ -26,6 +26,11 @@ import {
   Mail,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import CostBreakdown from "./CostBreakdown";
+import DocumentChecklist from "./DocumentChecklist";
+import TimelineView from "./TimelineView";
+import RejectionReasons from "./RejectionReasons";
+import BrokerFreeGuide from "./BrokerFreeGuide";
 
 interface DocumentGuideData {
   id: string;
@@ -65,13 +70,14 @@ const documentGuides: Record<string, DocumentGuideData> = {
       "The National ID Card is the primary identification document for Bangladeshi citizens.",
     importance:
       "Essential for voting, opening bank accounts, getting passport, and accessing government services.",
-    officialFee: "৳50-200",
-    processingTime: "7-15 days",
+    officialFee: "Free (New) | ৳230-৳575 (Correction/Renewal)",
+    processingTime: "3-6 months (New) | 7-30 days (Correction)",
     requiredDocuments: [
-      "Birth Certificate",
-      "Passport Size Photos (2 copies)",
-      "Address Proof",
-      "Parent's NID (if applicable)",
+      "SSC/JSC Certificate",
+      "Birth Certificate (Online)",
+      "Parents' NID",
+      "Utility Bill (Gas/Electricity/Water)",
+      "Citizenship Certificate (Chairman/Councilor)",
     ],
     procedure: [
       {
@@ -92,7 +98,7 @@ const documentGuides: Record<string, DocumentGuideData> = {
         step: 3,
         title: "Gather Required Documents",
         description:
-          "Collect all necessary documents including birth certificate and photos.",
+          "Collect all necessary documents including SSC/JSC certificate, online birth certificate, parents' NID.",
         tips: "Make photocopies of all documents and keep originals for verification.",
       },
       {
@@ -100,83 +106,72 @@ const documentGuides: Record<string, DocumentGuideData> = {
         title: "Submit Application",
         description:
           "Submit your completed application with documents at the registration office.",
-        tips: "Visit during office hours and expect to wait in queue during peak times.",
+        tips: "New issue is FREE. Correction costs ৳230 (Regular) or ৳345 (Urgent).",
       },
     ],
     offices: [
       {
-        name: "Dhaka District Registrar Office",
+        name: "Dhaka NID Registration Office",
         address: "Segunbagicha, Dhaka-1000",
         phone: "02-9558916",
         hours: "9:00 AM - 5:00 PM (Sunday-Thursday)",
       },
       {
-        name: "Chittagong District Registrar Office",
+        name: "Chittagong NID Office",
         address: "Court Building, Chittagong",
         phone: "031-2523456",
-        hours: "9:00 AM - 5:00 PM (Sunday-Thursday)",
-      },
-      {
-        name: "Sylhet District Registrar Office",
-        address: "Zindabazar, Sylhet",
-        phone: "0821-725896",
         hours: "9:00 AM - 5:00 PM (Sunday-Thursday)",
       },
     ],
     faqs: [
       {
         question: "How long does it take to get a new NID?",
-        answer:
-          "Typically 7-15 working days from the date of application submission.",
+        answer: "New NID: 3-6 months. Correction: 30 days (Regular) or 7 days (Urgent).",
       },
       {
-        question: "Can I apply for NID online?",
-        answer:
-          "Currently, you must visit the registration office in person for biometric data collection.",
+        question: "What is the fee for NID?",
+        answer: "New Issue: Free. Correction: ৳230 (Regular) / ৳345 (Urgent). Renewal: ৳345 (Regular) / ৳575 (Urgent).",
       },
       {
         question: "What if I lose my NID card?",
-        answer:
-          "You can apply for a duplicate card by filing a General Diary (GD) at the nearest police station first.",
+        answer: "You can apply for a duplicate card by filing a General Diary (GD) at the nearest police station first.",
       },
     ],
     tips: [
+      "New NID issuance is FREE - avoid middlemen charging extra",
       "Keep photocopies of your NID in multiple places",
       "Update your address if you move to a new location",
       "Check your information carefully before submitting",
-      "Avoid paying extra fees to middlemen",
     ],
-    relatedDocuments: ["Birth Certificate", "Passport", "Voter ID"],
+    relatedDocuments: ["Birth Certificate", "Passport", "Driving License"],
   },
   passport: {
     id: "passport",
-    title: "Passport",
-    titleBengali: "পাসপোর্ট",
+    title: "e-Passport",
+    titleBengali: "ই-পাসপোর্ট",
     description:
       "Official travel document issued by the Government of Bangladesh for international travel.",
     importance:
       "Required for international travel, visa applications, and as primary ID for many services.",
-    officialFee: "৳3,000-5,000",
-    processingTime: "21-30 days",
+    officialFee: "৳4,025 - ৳10,350",
+    processingTime: "15-21 days (Regular) | 7-10 days (Express)",
     requiredDocuments: [
-      "National ID Card",
-      "Birth Certificate",
-      "Passport Photos (4 copies)",
-      "Online Application Printout",
+      "NID Card or Birth Certificate",
+      "Previous Passport (if any)",
+      "GO/NOC (for Government Employees)",
+      "Proof of Profession (Student ID, Trade License)",
     ],
     procedure: [
       {
         step: 1,
         title: "Online Application",
-        description:
-          "Fill out the online application form at the official passport website.",
+        description: "Fill out the online application form at the official passport website.",
         tips: "Complete the form in one sitting as it cannot be saved partially.",
       },
       {
         step: 2,
         title: "Pay Application Fee",
-        description:
-          "Pay the required fee through designated banks or online payment.",
+        description: "48 Pages, 5 Years: ৳4,025 (Reg) / ৳6,325 (Exp). 10 Years: ৳5,750 (Reg) / ৳8,050 (Exp).",
         tips: "Keep the payment receipt safe as you'll need it for the appointment.",
       },
       {
@@ -200,8 +195,8 @@ const documentGuides: Record<string, DocumentGuideData> = {
       {
         step: 6,
         title: "Collect Passport",
-        description: "Collect your passport after the processing period.",
-        tips: "You can track your application status online using your reference number.",
+        description: "Regular: 15-21 days. Express: 7-10 days. Super Express: 2 days.",
+        tips: "Track your application status online using your reference number.",
       },
     ],
     offices: [
@@ -220,25 +215,491 @@ const documentGuides: Record<string, DocumentGuideData> = {
     ],
     faqs: [
       {
-        question: "How much does a passport cost?",
-        answer:
-          "Regular processing: ৳3,000, Express: ৳5,000, Super Express: ৳7,500",
+        question: "How much does an e-Passport cost?",
+        answer: "48 Pages, 5 Years: ৳4,025 (Reg) / ৳6,325 (Exp). 48 Pages, 10 Years: ৳5,750 (Reg) / ৳8,050 (Exp). 64 Pages, 10 Years: ৳8,050 (Reg) / ৳10,350 (Exp).",
       },
       {
-        question: "Can I renew my passport online?",
-        answer:
-          "You must apply online but visit the office in person for biometric data.",
+        question: "What is the processing time?",
+        answer: "Regular: 15-21 working days. Express: 7-10 working days. Super Express: 2 working days.",
       },
     ],
     tips: [
       "Apply well in advance of your travel date",
       "Check passport validity requirements for your destination",
       "Keep digital copies of your passport",
-      "Register with the embassy when traveling abroad",
+      "Government employees need GO/NOC from their department",
     ],
-    relatedDocuments: ["National ID Card", "Birth Certificate", "Visa"],
+    relatedDocuments: ["National ID Card", "Birth Certificate", "Police Clearance"],
   },
-  // Add more document guides here...
+  "birth-certificate": {
+    id: "birth-certificate",
+    title: "Birth Certificate",
+    titleBengali: "জন্ম নিবন্ধন",
+    description: "Official document recording a person's birth, issued by local government.",
+    importance: "Required for school admission, NID application, passport, and all government services.",
+    officialFee: "Free - ৳100",
+    processingTime: "1-7 Working Days",
+    requiredDocuments: [
+      "EPI (Vaccine) Card or Hospital Certificate",
+      "Parents' NID & Birth Certificates",
+      "Holding Tax Receipt (Residence Proof)",
+      "School Certificate (if applicable)",
+    ],
+    procedure: [
+      {
+        step: 1,
+        title: "Apply Online or Visit Office",
+        description: "Go to bdris.gov.bd or visit your local Union/Municipality office.",
+        tips: "Online application is faster and recommended.",
+      },
+      {
+        step: 2,
+        title: "Submit Required Documents",
+        description: "Provide EPI card, parents' documents, and address proof.",
+        tips: "Hospital certificate can be used instead of EPI card.",
+      },
+      {
+        step: 3,
+        title: "Pay Fee (if applicable)",
+        description: "0-45 Days: Free. 45 Days-5 Years: ৳25. Above 5 Years: ৳50. Correction: ৳100.",
+        tips: "Registration within 45 days of birth is FREE.",
+      },
+    ],
+    offices: [
+      {
+        name: "Local Union Parishad Office",
+        address: "Your local Union Parishad",
+        phone: "Contact local office",
+        hours: "9:00 AM - 5:00 PM (Sunday-Thursday)",
+      },
+      {
+        name: "City Corporation Office",
+        address: "Your local City Corporation ward office",
+        phone: "Contact local office",
+        hours: "9:00 AM - 5:00 PM (Sunday-Thursday)",
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the fee for birth certificate?",
+        answer: "0-45 Days: Free. 45 Days-5 Years: ৳25. Above 5 Years: ৳50. Correction: ৳100.",
+      },
+      {
+        question: "How long does it take?",
+        answer: "1-7 Working Days depending on local office/councilor.",
+      },
+    ],
+    tips: [
+      "Register within 45 days of birth to get it FREE",
+      "Keep the online registration number safe",
+      "Verify all information before final submission",
+      "You can download the certificate from bdris.gov.bd",
+    ],
+    relatedDocuments: ["National ID Card", "Passport", "School Admission"],
+  },
+  "marriage-certificate": {
+    id: "marriage-certificate",
+    title: "Marriage Certificate",
+    titleBengali: "বিবাহ নিবন্ধন",
+    description: "Official registration of marriage under Bangladesh law.",
+    importance: "Required for spouse visa, joint property, legal rights, and various government services.",
+    officialFee: "৳1,250 per ৳1 Lakh Denmohar",
+    processingTime: "Registration: Immediate | Certificate: 1-3 Days",
+    requiredDocuments: [
+      "NID / Birth Certificate (Bride & Groom)",
+      "2 Passport Size Photos (Each)",
+      "NID of 2 Witnesses",
+      "Affidavit (for Court Marriage/Late Registration)",
+    ],
+    procedure: [
+      {
+        step: 1,
+        title: "Contact Marriage Registrar (Kazi)",
+        description: "Find a licensed Kazi in your area for the registration.",
+        tips: "Verify the Kazi's license before proceeding.",
+      },
+      {
+        step: 2,
+        title: "Submit Documents",
+        description: "Provide NID/Birth certificates, photos, and witness documents.",
+        tips: "Both parties must be present with their original documents.",
+      },
+      {
+        step: 3,
+        title: "Pay Registration Fee",
+        description: "Fee is ৳1,250 per ৳1 Lakh Denmohar. Above ৳4 Lakh, fee is only ৳100 per Lakh.",
+        tips: "Example: ৳5 Lakh Denmohar = ৳5,100 fee.",
+      },
+      {
+        step: 4,
+        title: "Collect Certificate",
+        description: "Registration is immediate. Certificate issued within 1-3 days.",
+        tips: "Keep multiple copies of the certificate for future use.",
+      },
+    ],
+    offices: [
+      {
+        name: "Local Kazi Office",
+        address: "Licensed Marriage Registrar in your area",
+        phone: "Contact local Kazi",
+        hours: "As per appointment",
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the registration fee?",
+        answer: "৳1,250 per ৳1 Lakh Denmohar. Above ৳4 Lakh, fee is only ৳100 per Lakh. Example: ৳5 Lakh = ৳5,100.",
+      },
+      {
+        question: "How long does registration take?",
+        answer: "Registration is immediate. Certificate is issued within 1-3 days.",
+      },
+    ],
+    tips: [
+      "Verify Kazi's license before registration",
+      "Keep original documents safe",
+      "Both parties must be present",
+      "Court marriage requires an affidavit",
+    ],
+    relatedDocuments: ["National ID Card", "Birth Certificate", "Passport"],
+  },
+  "driving-license": {
+    id: "driving-license",
+    title: "Driving License",
+    titleBengali: "ড্রাইভিং লাইসেন্স",
+    description: "Official license to operate motor vehicles in Bangladesh.",
+    importance: "Legally required to drive any motor vehicle. Valid as government-issued ID.",
+    officialFee: "৳518 - ৳4,500",
+    processingTime: "Learner: Immediate-2 days | Smart Card: 30 days-6 months",
+    requiredDocuments: [
+      "Learner License Number",
+      "Medical Certificate (Registered Doctor)",
+      "NID / Birth Certificate",
+      "Utility Bill (Address Proof)",
+      "Education Certificate (Min. Class 8)",
+    ],
+    procedure: [
+      {
+        step: 1,
+        title: "Apply for Learner License",
+        description: "Visit BRTA office or apply online. Fee: ৳518 for 1 category.",
+        tips: "You must pass a written test to get learner license.",
+      },
+      {
+        step: 2,
+        title: "Get Medical Certificate",
+        description: "Obtain a medical fitness certificate from a registered doctor.",
+        tips: "Eye test is mandatory for the medical certificate.",
+      },
+      {
+        step: 3,
+        title: "Practice Driving",
+        description: "Practice for at least 30 days with your learner license.",
+        tips: "Learner license is valid for 3 months.",
+      },
+      {
+        step: 4,
+        title: "Take Driving Test",
+        description: "Appear for the practical driving test at BRTA.",
+        tips: "Practice parallel parking and lane driving.",
+      },
+      {
+        step: 5,
+        title: "Apply for Smart Card License",
+        description: "After passing, apply for Smart Card License. Fee: ~৳2,542.",
+        tips: "Current processing time is delayed to 3-6 months.",
+      },
+    ],
+    offices: [
+      {
+        name: "BRTA Dhaka Office",
+        address: "Mirpur, Dhaka",
+        phone: "02-9006963",
+        hours: "9:00 AM - 5:00 PM (Sunday-Thursday)",
+      },
+      {
+        name: "BRTA Chittagong Office",
+        address: "GEC Circle, Chittagong",
+        phone: "031-2520345",
+        hours: "9:00 AM - 5:00 PM (Sunday-Thursday)",
+      },
+    ],
+    faqs: [
+      {
+        question: "What are the fees?",
+        answer: "Learner License: ৳518 (1 Category). Smart Card License: ~৳2,542. Renewal: ৳2,500-৳4,500.",
+      },
+      {
+        question: "How long does it take?",
+        answer: "Learner: Immediate-2 days. Smart Card: Officially 30 days but currently delayed 3-6 months.",
+      },
+    ],
+    tips: [
+      "Apply for learner license first",
+      "Practice for at least 30 days",
+      "Minimum Class 8 education certificate required",
+      "Medical certificate must be from registered doctor",
+    ],
+    relatedDocuments: ["National ID Card", "Birth Certificate", "Medical Certificate"],
+  },
+  "education-certificate": {
+    id: "education-certificate",
+    title: "Education Certificate",
+    titleBengali: "শিক্ষাগত সনদ",
+    description: "Verification and authentication of educational documents from Education Boards.",
+    importance: "Required for higher education admission, job applications, and foreign credentials verification.",
+    officialFee: "৳50 - ৳1,500",
+    processingTime: "7-15 Working Days",
+    requiredDocuments: [
+      "Original Registration Card",
+      "Original Admit Card",
+      "Photocopy of Certificate/Marksheet",
+      "Application via Institute Head",
+    ],
+    procedure: [
+      {
+        step: 1,
+        title: "Collect Required Documents",
+        description: "Gather original registration card, admit card, and certificate copies.",
+        tips: "Keep original documents safe - only submit photocopies where allowed.",
+      },
+      {
+        step: 2,
+        title: "Submit Application",
+        description: "Apply through your institution head or directly to the Education Board.",
+        tips: "Verify fee: Board verification ৳50-৳300, Transcript ৳500-৳1,500.",
+      },
+      {
+        step: 3,
+        title: "Collect Certificate",
+        description: "Processing takes 7-15 working days. Collect from the Board office.",
+        tips: "Track your application status through the Board website.",
+      },
+    ],
+    offices: [
+      {
+        name: "Dhaka Education Board",
+        address: "Bakshibazar, Dhaka",
+        phone: "02-7120662",
+        hours: "9:00 AM - 5:00 PM (Sunday-Thursday)",
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the verification fee?",
+        answer: "Board Verification: ৳50-৳300 per document. Transcript/Original: ৳500-৳1,500. Fees vary by Board.",
+      },
+      {
+        question: "How long does verification take?",
+        answer: "7-15 Working Days depending on the Education Board.",
+      },
+    ],
+    tips: [
+      "Apply through your institution for faster processing",
+      "Keep photocopies of all certificates",
+      "Fees vary by Education Board",
+      "Check Board website for current fee structure",
+    ],
+    relatedDocuments: ["SSC Certificate", "HSC Certificate", "Degree Certificate"],
+  },
+  "business-license": {
+    id: "business-license",
+    title: "Business License",
+    titleBengali: "ব্যবসায়িক লাইসেন্স",
+    description: "Trade license required to operate any business in Bangladesh.",
+    importance: "Legally required for all businesses. Needed for bank accounts, tenders, and tax registration.",
+    officialFee: "৳500 - ৳50,000 + Taxes",
+    processingTime: "3-7 Working Days",
+    requiredDocuments: [
+      "Shop Rent Agreement / Ownership Proof",
+      "Holding Tax Receipt",
+      "Owner's NID",
+      "3 Passport Size Photos",
+    ],
+    procedure: [
+      {
+        step: 1,
+        title: "Collect Application Form",
+        description: "Get application form from City Corporation/Municipality office. Form fee: ৳50.",
+        tips: "Forms are also available online for some city corporations.",
+      },
+      {
+        step: 2,
+        title: "Submit Required Documents",
+        description: "Provide rent agreement, holding tax receipt, NID, and photos.",
+        tips: "For rented premises, landlord's consent may be required.",
+      },
+      {
+        step: 3,
+        title: "Pay License Fee",
+        description: "Fee: ৳500-৳50,000 based on business capital. Plus 15% VAT + 30% Signboard Tax.",
+        tips: "License must be renewed annually.",
+      },
+      {
+        step: 4,
+        title: "Inspection & Collection",
+        description: "After inspection, collect license within 3-7 working days.",
+        tips: "Display license prominently in your business premises.",
+      },
+    ],
+    offices: [
+      {
+        name: "Dhaka City Corporation",
+        address: "Nagar Bhaban, Dhaka",
+        phone: "02-9558745",
+        hours: "9:00 AM - 5:00 PM (Sunday-Thursday)",
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the license fee?",
+        answer: "Application Form: ৳50. License Fee: ৳500-৳50,000 based on capital. Additional: 15% VAT + 30% Signboard Tax.",
+      },
+      {
+        question: "How long does it take?",
+        answer: "3-7 Working Days after document submission and inspection.",
+      },
+    ],
+    tips: [
+      "Renew license annually before expiry",
+      "Display license at business premises",
+      "Fee depends on business type and capital",
+      "Keep all receipts for tax purposes",
+    ],
+    relatedDocuments: ["National ID Card", "TIN Certificate", "VAT Registration"],
+  },
+  "land-records": {
+    id: "land-records",
+    title: "Land Records",
+    titleBengali: "ভূমি রেকর্ড",
+    description: "Official land ownership documents including Mutation (Namjari) and Porcha.",
+    importance: "Essential for proving land ownership, property transfer, and legal disputes.",
+    officialFee: "৳100 - ৳1,170",
+    processingTime: "Mutation: 28-45 days | Porcha: 7-15 days",
+    requiredDocuments: [
+      "Main Deed (Dalil) & Bia Dalil",
+      "Warish Certificate (if inheritance)",
+      "Up-to-date Land Tax (Khajna) Receipt",
+      "Applicant NID & Photo",
+    ],
+    procedure: [
+      {
+        step: 1,
+        title: "Collect Required Documents",
+        description: "Gather main deed, warish certificate (if inherited), and land tax receipts.",
+        tips: "Ensure all land taxes are paid up-to-date.",
+      },
+      {
+        step: 2,
+        title: "Apply for Mutation (Namjari)",
+        description: "Submit application at AC Land office. Fixed fee: ৳1,170.",
+        tips: "Fee breakdown: Court ৳20 + Notice ৳50 + Record ৳1,000 + Khatian ৳100.",
+      },
+      {
+        step: 3,
+        title: "Wait for Processing",
+        description: "Mutation: 28 days (City) / 45 days (Rural). Porcha: 7-15 days.",
+        tips: "You can apply for Porcha/Certified Copy separately for ৳100.",
+      },
+      {
+        step: 4,
+        title: "Collect Documents",
+        description: "Collect mutation certificate and updated Porcha from the office.",
+        tips: "Verify all information in the documents before leaving.",
+      },
+    ],
+    offices: [
+      {
+        name: "AC Land Office",
+        address: "Your local Upazila/Thana Land Office",
+        phone: "Contact local office",
+        hours: "9:00 AM - 5:00 PM (Sunday-Thursday)",
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the Mutation fee?",
+        answer: "Mutation (Namjari): ৳1,170 fixed (Court ৳20 + Notice ৳50 + Record ৳1,000 + Khatian ৳100). Porcha: ৳100.",
+      },
+      {
+        question: "How long does Mutation take?",
+        answer: "28 days in City Corporation areas. 45 days in Rural/Upazila areas. Porcha: 7-15 days.",
+      },
+    ],
+    tips: [
+      "Pay all land taxes before applying",
+      "Keep original deeds in a safe place",
+      "For inherited land, get Warish Certificate first",
+      "Verify boundaries during mutation process",
+    ],
+    relatedDocuments: ["Warish Certificate", "Land Tax Receipt", "Property Deed"],
+  },
+  "police-clearance": {
+    id: "police-clearance",
+    title: "Police Clearance",
+    titleBengali: "পুলিশ ক্লিয়ারেন্স",
+    description: "Certificate verifying no criminal record, required for visas and employment.",
+    importance: "Required for immigration, foreign employment, government jobs, and visa applications.",
+    officialFee: "৳500",
+    processingTime: "7-14 Working Days",
+    requiredDocuments: [
+      "Valid Passport (Mandatory)",
+      "Treasury Challan (Code: 1-2201-0001-2681)",
+      "NID or Birth Certificate",
+      "Councilor/Chairman Certificate (Address)",
+    ],
+    procedure: [
+      {
+        step: 1,
+        title: "Pay Challan Fee",
+        description: "Pay ৳500 via Sonali Bank or Treasury Challan. Code: 1-2201-0001-2681.",
+        tips: "Keep the original challan receipt - you'll need it for submission.",
+      },
+      {
+        step: 2,
+        title: "Submit Application",
+        description: "Apply at your local police station with passport, NID, and challan.",
+        tips: "Councilor/Chairman certificate is needed for address verification.",
+      },
+      {
+        step: 3,
+        title: "Police Verification",
+        description: "Police will verify your address and background. May visit your home.",
+        tips: "Processing may take longer if police visit is delayed.",
+      },
+      {
+        step: 4,
+        title: "Collect Certificate",
+        description: "Collect from the same police station after 7-14 working days.",
+        tips: "Certificate is usually valid for 6 months to 1 year.",
+      },
+    ],
+    offices: [
+      {
+        name: "Local Police Station",
+        address: "Your residential area police station",
+        phone: "Contact local police station",
+        hours: "As per police station timings",
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the fee?",
+        answer: "Challan Fee: ৳500 paid via Sonali Bank or Treasury Challan (Code: 1-2201-0001-2681).",
+      },
+      {
+        question: "How long does it take?",
+        answer: "7-14 Working Days. May take longer if police verification visit is delayed.",
+      },
+    ],
+    tips: [
+      "Valid passport is MANDATORY",
+      "Pay challan at Sonali Bank only",
+      "Be available for police verification visit",
+      "Apply early - processing can be delayed",
+    ],
+    relatedDocuments: ["Passport", "National ID Card", "Address Certificate"],
+  },
 };
 
 const DocumentGuidePage: React.FC = () => {
@@ -473,6 +934,24 @@ const DocumentGuidePage: React.FC = () => {
         </Tabs>
       </section>
 
+      {/* Additional Features */}
+      <section className="px-4 mt-6 space-y-4">
+        {/* Cost Breakdown */}
+        <CostBreakdown documentId={id || "nid"} documentTitle={guide.title} />
+        
+        {/* Document Checklist */}
+        <DocumentChecklist documentId={id || "nid"} documentTitle={guide.title} />
+        
+        {/* Timeline View */}
+        <TimelineView documentId={id || "nid"} documentTitle={guide.title} />
+        
+        {/* Rejection Reasons */}
+        <RejectionReasons documentId={id || "nid"} documentTitle={guide.title} />
+        
+        {/* Broker Free Guide */}
+        <BrokerFreeGuide documentId={id || "nid"} documentTitle={guide.title} />
+      </section>
+
       {/* Consultancy Form Section */}
       <section className="px-4 mt-6 mb-8">
         <Card className="bg-[#333533] border-0 rounded-2xl overflow-hidden">
@@ -483,12 +962,12 @@ const DocumentGuidePage: React.FC = () => {
                 <MessageCircle className="h-6 w-6 text-[#242423]" />
               </div>
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-[#E8EDDF]">Need Help?</h3>
-                <p className="text-xs text-[#CFDBD5]/60">Get 1-on-1 expert consultancy</p>
+                <h3 className="text-base sm:text-lg font-bold text-[#E8EDDF]">{t("consultancy.title")}</h3>
+                <p className="text-xs text-[#CFDBD5]/60">{t("consultancy.subtitle")}</p>
               </div>
             </div>
 
-            <ConsultancyForm documentTitle={guide.title} />
+            <ConsultancyForm documentTitle={guide.title} t={t} />
           </CardContent>
         </Card>
       </section>
@@ -496,7 +975,7 @@ const DocumentGuidePage: React.FC = () => {
   );
 };
 
-const ConsultancyForm = ({ documentTitle }: { documentTitle: string }) => {
+const ConsultancyForm = ({ documentTitle, t }: { documentTitle: string; t: (key: string) => string }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -526,9 +1005,9 @@ const ConsultancyForm = ({ documentTitle }: { documentTitle: string }) => {
         <div className="w-16 h-16 bg-green-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
           <CheckCircle2 className="h-8 w-8 text-green-500" />
         </div>
-        <h4 className="text-[#E8EDDF] font-semibold text-lg mb-2">Request Submitted!</h4>
+        <h4 className="text-[#E8EDDF] font-semibold text-lg mb-2">{t("consultancy.success")}</h4>
         <p className="text-[#CFDBD5]/60 text-sm">
-          We'll get back to you within 24 hours.
+          {t("consultancy.successMessage")}
         </p>
       </div>
     );
@@ -539,7 +1018,7 @@ const ConsultancyForm = ({ documentTitle }: { documentTitle: string }) => {
       <div className="space-y-1.5">
         <Label htmlFor="name" className="text-[#CFDBD5]/80 text-sm flex items-center gap-2">
           <User className="h-3.5 w-3.5 text-[#F5CB5C]" />
-          Your Name
+          {t("consultancy.name")}
         </Label>
         <Input
           id="name"
@@ -547,7 +1026,7 @@ const ConsultancyForm = ({ documentTitle }: { documentTitle: string }) => {
           value={formData.name}
           onChange={handleChange}
           required
-          placeholder="Enter your full name"
+          placeholder={t("consultancy.namePlaceholder")}
           className="bg-[#242423] border-0 text-[#E8EDDF] placeholder:text-[#CFDBD5]/30 rounded-xl h-12 focus:ring-2 focus:ring-[#F5CB5C]/50"
         />
       </div>
@@ -556,7 +1035,7 @@ const ConsultancyForm = ({ documentTitle }: { documentTitle: string }) => {
         <div className="space-y-1.5">
           <Label htmlFor="email" className="text-[#CFDBD5]/80 text-sm flex items-center gap-2">
             <Mail className="h-3.5 w-3.5 text-[#F5CB5C]" />
-            Email
+            {t("consultancy.email")}
           </Label>
           <Input
             id="email"
@@ -565,7 +1044,7 @@ const ConsultancyForm = ({ documentTitle }: { documentTitle: string }) => {
             value={formData.email}
             onChange={handleChange}
             required
-            placeholder="your@email.com"
+            placeholder={t("consultancy.emailPlaceholder")}
             className="bg-[#242423] border-0 text-[#E8EDDF] placeholder:text-[#CFDBD5]/30 rounded-xl h-12 focus:ring-2 focus:ring-[#F5CB5C]/50"
           />
         </div>
@@ -573,7 +1052,7 @@ const ConsultancyForm = ({ documentTitle }: { documentTitle: string }) => {
         <div className="space-y-1.5">
           <Label htmlFor="phone" className="text-[#CFDBD5]/80 text-sm flex items-center gap-2">
             <Phone className="h-3.5 w-3.5 text-[#F5CB5C]" />
-            Phone
+            {t("consultancy.phone")}
           </Label>
           <Input
             id="phone"
@@ -582,7 +1061,7 @@ const ConsultancyForm = ({ documentTitle }: { documentTitle: string }) => {
             value={formData.phone}
             onChange={handleChange}
             required
-            placeholder="+880 1XXX XXXXXX"
+            placeholder={t("consultancy.phonePlaceholder")}
             className="bg-[#242423] border-0 text-[#E8EDDF] placeholder:text-[#CFDBD5]/30 rounded-xl h-12 focus:ring-2 focus:ring-[#F5CB5C]/50"
           />
         </div>
@@ -591,7 +1070,7 @@ const ConsultancyForm = ({ documentTitle }: { documentTitle: string }) => {
       <div className="space-y-1.5">
         <Label htmlFor="issue" className="text-[#CFDBD5]/80 text-sm flex items-center gap-2">
           <MessageCircle className="h-3.5 w-3.5 text-[#F5CB5C]" />
-          Describe Your Issue
+          {t("consultancy.issue")}
         </Label>
         <Textarea
           id="issue"
@@ -599,7 +1078,7 @@ const ConsultancyForm = ({ documentTitle }: { documentTitle: string }) => {
           value={formData.issue}
           onChange={handleChange}
           required
-          placeholder={`Tell us about your ${documentTitle} related issue...`}
+          placeholder={`${t("consultancy.issuePlaceholder")} (${documentTitle})`}
           rows={3}
           className="bg-[#242423] border-0 text-[#E8EDDF] placeholder:text-[#CFDBD5]/30 rounded-xl focus:ring-2 focus:ring-[#F5CB5C]/50 resize-none"
         />
@@ -610,11 +1089,11 @@ const ConsultancyForm = ({ documentTitle }: { documentTitle: string }) => {
         className="w-full bg-[#F5CB5C] text-[#242423] hover:bg-[#F5CB5C]/90 active:scale-[0.98] rounded-xl h-12 font-semibold text-sm transition-transform"
       >
         <Send className="h-4 w-4 mr-2" />
-        Request Consultation
+        {t("consultancy.submit")}
       </Button>
 
       <p className="text-[10px] text-[#CFDBD5]/50 text-center pt-1">
-        ✨ Free consultation • Response within 24 hours
+        {t("consultancy.note")}
       </p>
     </form>
   );

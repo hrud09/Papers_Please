@@ -129,6 +129,46 @@ const translations = {
     "guide.processingTime": "Processing Time",
     "guide.requiredDocuments": "Required Documents",
     "guide.step": "Step",
+
+    // Navigation
+    "nav.home": "Home",
+    "nav.guides": "Guides",
+    "nav.profile": "Profile",
+
+    // Profile Page
+    "profile.title": "My Documents",
+    "profile.subtitle": "Manage your important files",
+    "profile.governmentIds": "Government IDs",
+    "profile.viewAll": "View All",
+    "profile.addNew": "Add New",
+    "profile.savedDocuments": "Saved Documents",
+    "profile.upload": "Upload",
+    "profile.filterAll": "All",
+    "profile.filterGovernment": "Government",
+    "profile.filterEducation": "Education",
+    "profile.filterWork": "Work",
+    "profile.filterPersonal": "Personal",
+    "profile.noDocuments": "No documents in this category",
+    "profile.uploadDocument": "Upload Document",
+
+    // Consultancy Form
+    "consultancy.title": "Need Help?",
+    "consultancy.subtitle": "Get 1-on-1 expert consultancy",
+    "consultancy.name": "Your Name",
+    "consultancy.namePlaceholder": "Enter your full name",
+    "consultancy.email": "Email",
+    "consultancy.emailPlaceholder": "your@email.com",
+    "consultancy.phone": "Phone",
+    "consultancy.phonePlaceholder": "+880 1XXX XXXXXX",
+    "consultancy.issue": "Describe Your Issue",
+    "consultancy.issuePlaceholder": "Tell us about your issue...",
+    "consultancy.submit": "Request Consultation",
+    "consultancy.note": "✨ Free consultation • Response within 24 hours",
+    "consultancy.success": "Request Submitted!",
+    "consultancy.successMessage": "We'll get back to you within 24 hours.",
+
+    // Common
+    "common.comingSoon": "Coming Soon",
   },
   bn: {
     // Header
@@ -243,6 +283,46 @@ const translations = {
     "guide.processingTime": "প্রক্রিয়াকরণের সময়",
     "guide.requiredDocuments": "প্রয়োজনীয় ডকুমেন্ট",
     "guide.step": "ধাপ",
+
+    // Navigation
+    "nav.home": "হোম",
+    "nav.guides": "গাইড",
+    "nav.profile": "প্রোফাইল",
+
+    // Profile Page
+    "profile.title": "আমার ডকুমেন্ট",
+    "profile.subtitle": "আপনার গুরুত্বপূর্ণ ফাইল পরিচালনা করুন",
+    "profile.governmentIds": "সরকারি আইডি",
+    "profile.viewAll": "সব দেখুন",
+    "profile.addNew": "নতুন যোগ করুন",
+    "profile.savedDocuments": "সংরক্ষিত ডকুমেন্ট",
+    "profile.upload": "আপলোড",
+    "profile.filterAll": "সব",
+    "profile.filterGovernment": "সরকারি",
+    "profile.filterEducation": "শিক্ষা",
+    "profile.filterWork": "কাজ",
+    "profile.filterPersonal": "ব্যক্তিগত",
+    "profile.noDocuments": "এই ক্যাটাগরিতে কোনো ডকুমেন্ট নেই",
+    "profile.uploadDocument": "ডকুমেন্ট আপলোড করুন",
+
+    // Consultancy Form
+    "consultancy.title": "সাহায্য দরকার?",
+    "consultancy.subtitle": "১-১ বিশেষজ্ঞ পরামর্শ পান",
+    "consultancy.name": "আপনার নাম",
+    "consultancy.namePlaceholder": "আপনার পুরো নাম লিখুন",
+    "consultancy.email": "ইমেইল",
+    "consultancy.emailPlaceholder": "your@email.com",
+    "consultancy.phone": "ফোন",
+    "consultancy.phonePlaceholder": "+৮৮০ ১XXX XXXXXX",
+    "consultancy.issue": "আপনার সমস্যা বর্ণনা করুন",
+    "consultancy.issuePlaceholder": "আপনার সমস্যা সম্পর্কে বলুন...",
+    "consultancy.submit": "পরামর্শ অনুরোধ করুন",
+    "consultancy.note": "✨ বিনামূল্যে পরামর্শ • ২৪ ঘন্টার মধ্যে উত্তর",
+    "consultancy.success": "অনুরোধ জমা হয়েছে!",
+    "consultancy.successMessage": "আমরা ২৪ ঘন্টার মধ্যে আপনার সাথে যোগাযোগ করব।",
+
+    // Common
+    "common.comingSoon": "শীঘ্রই আসছে",
   },
 };
 

@@ -19,6 +19,7 @@ import {
   Eye,
   ChevronRight,
 } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SavedDocument {
   id: string;
@@ -106,13 +107,14 @@ const Profile = () => {
   ]);
 
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const { t } = useLanguage();
 
   const categories = [
-    { id: "all", label: "All", color: "bg-[#F5CB5C]" },
-    { id: "government", label: "Government", color: "bg-green-500" },
-    { id: "education", label: "Education", color: "bg-blue-500" },
-    { id: "work", label: "Work", color: "bg-purple-500" },
-    { id: "personal", label: "Personal", color: "bg-orange-500" },
+    { id: "all", labelKey: "profile.filterAll", color: "bg-[#F5CB5C]" },
+    { id: "government", labelKey: "profile.filterGovernment", color: "bg-green-500" },
+    { id: "education", labelKey: "profile.filterEducation", color: "bg-blue-500" },
+    { id: "work", labelKey: "profile.filterWork", color: "bg-purple-500" },
+    { id: "personal", labelKey: "profile.filterPersonal", color: "bg-orange-500" },
   ];
 
   const filteredDocuments =
@@ -182,20 +184,20 @@ const Profile = () => {
 
       {/* Header */}
       <div className="px-4 pt-6 pb-4">
-        <h1 className="text-2xl font-bold text-[#E8EDDF]">My Documents</h1>
-        <p className="text-sm text-[#CFDBD5]/70">Manage your important files</p>
+        <h1 className="text-2xl font-bold text-[#E8EDDF]">{t("profile.title")}</h1>
+        <p className="text-sm text-[#CFDBD5]/70">{t("profile.subtitle")}</p>
       </div>
 
       {/* Government Documents */}
       <div className="px-4 mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold text-[#E8EDDF]">Government IDs</h2>
+          <h2 className="text-lg font-semibold text-[#E8EDDF]">{t("profile.governmentIds")}</h2>
           <Button
             variant="ghost"
             size="sm"
             className="text-[#F5CB5C] hover:bg-[#333533] p-0"
           >
-            View All <ChevronRight className="h-4 w-4 ml-1" />
+            {t("profile.viewAll")} <ChevronRight className="h-4 w-4 ml-1" />
           </Button>
         </div>
 
@@ -235,7 +237,7 @@ const Profile = () => {
           >
             <CardContent className="p-4 flex flex-col items-center justify-center h-full">
               <Plus className="h-6 w-6 text-[#CFDBD5]/60 mb-2" />
-              <p className="text-xs text-[#CFDBD5]/60">Add New</p>
+              <p className="text-xs text-[#CFDBD5]/60">{t("profile.addNew")}</p>
             </CardContent>
           </Card>
         </div>
@@ -244,13 +246,13 @@ const Profile = () => {
       {/* Saved Documents */}
       <div className="px-4">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold text-[#E8EDDF]">Saved Documents</h2>
+          <h2 className="text-lg font-semibold text-[#E8EDDF]">{t("profile.savedDocuments")}</h2>
           <Button
             onClick={handleUpload}
             size="sm"
             className="bg-[#F5CB5C] text-[#242423] hover:bg-[#F5CB5C]/90 rounded-xl"
           >
-            <Upload className="h-4 w-4 mr-1" /> Upload
+            <Upload className="h-4 w-4 mr-1" /> {t("profile.upload")}
           </Button>
         </div>
 
@@ -268,7 +270,7 @@ const Profile = () => {
                   : "bg-[#333533] text-[#CFDBD5] hover:bg-[#333533]/80"
               }`}
             >
-              {cat.label}
+              {t(cat.labelKey)}
             </Button>
           ))}
         </div>
@@ -342,12 +344,12 @@ const Profile = () => {
         {filteredDocuments.length === 0 && (
           <div className="text-center py-12">
             <FileText className="h-12 w-12 text-[#CFDBD5]/30 mx-auto mb-4" />
-            <p className="text-[#CFDBD5]/60">No documents in this category</p>
+            <p className="text-[#CFDBD5]/60">{t("profile.noDocuments")}</p>
             <Button
               onClick={handleUpload}
               className="mt-4 bg-[#F5CB5C] text-[#242423] hover:bg-[#F5CB5C]/90 rounded-xl"
             >
-              Upload Document
+              {t("profile.uploadDocument")}
             </Button>
           </div>
         )}

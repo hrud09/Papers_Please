@@ -17,6 +17,7 @@ import {
   Clock,
   DollarSign,
   ArrowRight,
+  Lock,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -32,6 +33,7 @@ interface DocumentCategory {
   documents: string[];
   steps: number;
   color: string;
+  comingSoon?: boolean;
 }
 
 interface DocumentCategoryGridProps {
@@ -48,25 +50,27 @@ const DocumentCategoryGrid = ({
       titleBengali: "জাতীয় পরিচয়পত্র",
       description: "Apply for new NID or update existing information",
       icon: <CreditCard className="h-6 w-6" />,
-      estimatedTime: "7-15 days",
-      officialFee: "৳50-200",
+      estimatedTime: "3-6 months (New)",
+      officialFee: "Free (New)",
       popularity: "high",
-      documents: ["Birth Certificate", "Passport Photo", "Address Proof"],
+      documents: ["SSC/JSC Certificate", "Birth Certificate", "Parents' NID", "Utility Bill"],
       steps: 4,
       color: "bg-blue-500",
+      comingSoon: false,
     },
     {
       id: "passport",
-      title: "Passport",
-      titleBengali: "পাসপোর্ট",
+      title: "e-Passport",
+      titleBengali: "ই-পাসপোর্ট",
       description: "Apply for new passport or renewal",
       icon: <FileText className="h-6 w-6" />,
-      estimatedTime: "21-30 days",
-      officialFee: "৳3,000-5,000",
+      estimatedTime: "15-21 days",
+      officialFee: "৳4,025+",
       popularity: "high",
-      documents: ["NID Card", "Birth Certificate", "Photos"],
+      documents: ["NID/Birth Cert", "Previous Passport", "GO/NOC", "Proof of Profession"],
       steps: 6,
       color: "bg-green-500",
+      comingSoon: false,
     },
     {
       id: "birth-certificate",
@@ -75,11 +79,12 @@ const DocumentCategoryGrid = ({
       description: "Register birth or get certified copy",
       icon: <Users className="h-6 w-6" />,
       estimatedTime: "1-7 days",
-      officialFee: "৳50-100",
+      officialFee: "Free-৳50",
       popularity: "high",
-      documents: ["Hospital Certificate", "Parent's NID", "Affidavit"],
+      documents: ["EPI/Vaccine Card", "Parents' NID", "Holding Tax Receipt"],
       steps: 3,
       color: "bg-purple-500",
+      comingSoon: false,
     },
     {
       id: "marriage-certificate",
@@ -88,11 +93,12 @@ const DocumentCategoryGrid = ({
       description: "Register marriage and get certificate",
       icon: <Heart className="h-6 w-6" />,
       estimatedTime: "1-3 days",
-      officialFee: "৳50-150",
+      officialFee: "৳1,250+",
       popularity: "medium",
-      documents: ["Both NID Cards", "Photos", "Witnesses"],
+      documents: ["NID/Birth Cert (Both)", "2 Photos (Each)", "NID of Witnesses"],
       steps: 4,
       color: "bg-pink-500",
+      comingSoon: false,
     },
     {
       id: "driving-license",
@@ -100,12 +106,13 @@ const DocumentCategoryGrid = ({
       titleBengali: "ড্রাইভিং লাইসেন্স",
       description: "Apply for new or renew driving license",
       icon: <Car className="h-6 w-6" />,
-      estimatedTime: "15-30 days",
-      officialFee: "৳1,000-2,000",
+      estimatedTime: "30 days-6 months",
+      officialFee: "৳518-৳4,500",
       popularity: "high",
-      documents: ["NID Card", "Medical Certificate", "Photos"],
+      documents: ["Learner License", "Medical Certificate", "NID", "Education Cert"],
       steps: 5,
       color: "bg-orange-500",
+      comingSoon: false,
     },
     {
       id: "education-certificate",
@@ -113,12 +120,13 @@ const DocumentCategoryGrid = ({
       titleBengali: "শিক্ষাগত সনদ",
       description: "Verify and authenticate educational documents",
       icon: <GraduationCap className="h-6 w-6" />,
-      estimatedTime: "7-14 days",
-      officialFee: "৳200-500",
+      estimatedTime: "7-15 days",
+      officialFee: "৳50-৳1,500",
       popularity: "medium",
-      documents: ["Original Certificate", "NID Card", "Application"],
+      documents: ["Registration Card", "Admit Card", "Certificate Copy"],
       steps: 3,
       color: "bg-indigo-500",
+      comingSoon: false,
     },
     {
       id: "business-license",
@@ -126,12 +134,13 @@ const DocumentCategoryGrid = ({
       titleBengali: "ব্যবসায়িক লাইসেন্স",
       description: "Register new business or renew license",
       icon: <Briefcase className="h-6 w-6" />,
-      estimatedTime: "15-45 days",
-      officialFee: "৳500-5,000",
+      estimatedTime: "3-7 days",
+      officialFee: "৳500-৳50,000",
       popularity: "medium",
-      documents: ["NID Card", "Business Plan", "NOC"],
-      steps: 7,
+      documents: ["Shop Rent Agreement", "Holding Tax Receipt", "Owner's NID"],
+      steps: 5,
       color: "bg-teal-500",
+      comingSoon: false,
     },
     {
       id: "land-records",
@@ -139,12 +148,13 @@ const DocumentCategoryGrid = ({
       titleBengali: "ভূমি রেকর্ড",
       description: "Get land ownership documents and records",
       icon: <Home className="h-6 w-6" />,
-      estimatedTime: "7-21 days",
-      officialFee: "৳100-1,000",
+      estimatedTime: "28-45 days",
+      officialFee: "৳100-৳1,170",
       popularity: "medium",
-      documents: ["Previous Deed", "NID Card", "Survey Report"],
+      documents: ["Main Deed (Dalil)", "Warish Certificate", "Land Tax Receipt"],
       steps: 5,
       color: "bg-yellow-500",
+      comingSoon: false,
     },
     {
       id: "police-clearance",
@@ -152,12 +162,13 @@ const DocumentCategoryGrid = ({
       titleBengali: "পুলিশ ক্লিয়ারেন্স",
       description: "Get police verification certificate",
       icon: <Shield className="h-6 w-6" />,
-      estimatedTime: "14-30 days",
-      officialFee: "৳200-500",
+      estimatedTime: "7-14 days",
+      officialFee: "৳500",
       popularity: "low",
-      documents: ["NID Card", "Passport", "Application"],
+      documents: ["Valid Passport", "Treasury Challan", "NID", "Chairman Cert"],
       steps: 4,
       color: "bg-red-500",
+      comingSoon: false,
     },
   ],
 }: DocumentCategoryGridProps) => {
@@ -261,15 +272,25 @@ const DocumentCategoryGrid = ({
         {filteredCategories.map((category) => (
           <Card
             key={category.id}
-            className={`bg-[#333533] border-0 rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${
-              selectedCategory === category.id ? "ring-2 ring-[#F5CB5C]" : ""
-            }`}
+            className={`bg-[#333533] border-0 rounded-2xl transition-all duration-300 ${
+              category.comingSoon 
+                ? "opacity-60 cursor-not-allowed" 
+                : "cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+            } ${selectedCategory === category.id ? "ring-2 ring-[#F5CB5C]" : ""}`}
             onClick={() => {
-              setSelectedCategory(category.id);
-              onCategorySelect(category.id);
+              if (!category.comingSoon) {
+                setSelectedCategory(category.id);
+                onCategorySelect(category.id);
+              }
             }}
           >
-            <CardContent className="p-4">
+            <CardContent className="p-4 relative">
+              {category.comingSoon && (
+                <div className="absolute top-2 right-2 flex items-center gap-1 bg-[#242423] px-2 py-1 rounded-lg">
+                  <Lock className="h-3 w-3 text-[#F5CB5C]" />
+                  <span className="text-[10px] text-[#F5CB5C] font-medium">{t("common.comingSoon")}</span>
+                </div>
+              )}
               <div className="flex items-start gap-3 mb-3">
                 <div className={`p-3 rounded-xl ${category.color} text-white`}>
                   {category.icon}
@@ -303,7 +324,11 @@ const DocumentCategoryGrid = ({
                     </span>
                   ))}
                 </div>
-                <ArrowRight className="h-5 w-5 text-[#F5CB5C]" />
+                {category.comingSoon ? (
+                  <Lock className="h-5 w-5 text-[#CFDBD5]/40" />
+                ) : (
+                  <ArrowRight className="h-5 w-5 text-[#F5CB5C]" />
+                )}
               </div>
             </CardContent>
           </Card>

@@ -10,9 +10,9 @@ const DesktopNavigation = () => {
   const location = useLocation();
 
   const navigationLinks = [
-    { name: "Home", icon: <HomeIcon className="h-4 w-4" />, path: "/" },
-    { name: "Guides", icon: <FileText className="h-4 w-4" />, path: "/guide/nid" },
-    { name: "Profile", icon: <User className="h-4 w-4" />, path: "/profile" },
+    { nameKey: "nav.home", icon: <HomeIcon className="h-4 w-4" />, path: "/" },
+    { nameKey: "nav.guides", icon: <FileText className="h-4 w-4" />, path: "/guide/nid" },
+    { nameKey: "nav.profile", icon: <User className="h-4 w-4" />, path: "/profile" },
   ];
 
   return (
@@ -42,13 +42,13 @@ const DesktopNavigation = () => {
                 size="sm"
                 onClick={() => navigate(link.path)}
                 className={`flex items-center gap-2 rounded-xl transition-all ${
-                  location.pathname === link.path || (link.name === "Guides" && location.pathname.startsWith("/guide"))
+                  location.pathname === link.path || (link.nameKey === "nav.guides" && location.pathname.startsWith("/guide"))
                     ? "bg-[#F5CB5C] text-[#242423] hover:bg-[#F5CB5C]/90" 
                     : "text-[#CFDBD5] hover:bg-[#333533]"
                 }`}
               >
                 {link.icon}
-                <span>{link.name}</span>
+                <span>{t(link.nameKey)}</span>
               </Button>
             ))}
           </nav>
