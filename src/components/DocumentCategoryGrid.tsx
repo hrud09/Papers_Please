@@ -203,144 +203,108 @@ const DocumentCategoryGrid = ({
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto bg-white p-6">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-primary mb-2">
-          {t("category.title")}
-        </h2>
-        <p className="text-muted-foreground mb-4">
-          {t("category.description")}
-        </p>
-
-        {/* Filter Buttons */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          <Button
-            variant={filter === "all" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setFilter("all")}
-          >
-            {t("category.filter.all")}
-          </Button>
-          <Button
-            variant={filter === "high" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setFilter("high")}
-          >
-            {t("category.filter.popular")}
-          </Button>
-          <Button
-            variant={filter === "medium" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setFilter("medium")}
-          >
-            {t("category.filter.common")}
-          </Button>
-          <Button
-            variant={filter === "low" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setFilter("low")}
-          >
-            {t("category.filter.specialized")}
-          </Button>
-        </div>
+    <div className="w-full">
+      {/* Filter Buttons */}
+      <div className="flex gap-2 mb-4 overflow-x-auto pb-2 scrollbar-hide">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setFilter("all")}
+          className={`rounded-full px-4 whitespace-nowrap transition-all ${
+            filter === "all"
+              ? "bg-[#F5CB5C] text-[#242423]"
+              : "bg-[#333533] text-[#CFDBD5] hover:bg-[#333533]/80"
+          }`}
+        >
+          {t("category.filter.all")}
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setFilter("high")}
+          className={`rounded-full px-4 whitespace-nowrap transition-all ${
+            filter === "high"
+              ? "bg-[#F5CB5C] text-[#242423]"
+              : "bg-[#333533] text-[#CFDBD5] hover:bg-[#333533]/80"
+          }`}
+        >
+          {t("category.filter.popular")}
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setFilter("medium")}
+          className={`rounded-full px-4 whitespace-nowrap transition-all ${
+            filter === "medium"
+              ? "bg-[#F5CB5C] text-[#242423]"
+              : "bg-[#333533] text-[#CFDBD5] hover:bg-[#333533]/80"
+          }`}
+        >
+          {t("category.filter.common")}
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setFilter("low")}
+          className={`rounded-full px-4 whitespace-nowrap transition-all ${
+            filter === "low"
+              ? "bg-[#F5CB5C] text-[#242423]"
+              : "bg-[#333533] text-[#CFDBD5] hover:bg-[#333533]/80"
+          }`}
+        >
+          {t("category.filter.specialized")}
+        </Button>
       </div>
 
       {/* Document Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredCategories.map((category) => (
           <Card
             key={category.id}
-            className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 ${
-              selectedCategory === category.id ? "ring-2 ring-primary" : ""
+            className={`bg-[#333533] border-0 rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${
+              selectedCategory === category.id ? "ring-2 ring-[#F5CB5C]" : ""
             }`}
             onClick={() => {
               setSelectedCategory(category.id);
               onCategorySelect(category.id);
             }}
           >
-            <CardHeader className="pb-3">
-              <div className="flex items-start justify-between">
-                <div className={`p-3 rounded-lg ${category.color} text-white`}>
+            <CardContent className="p-4">
+              <div className="flex items-start gap-3 mb-3">
+                <div className={`p-3 rounded-xl ${category.color} text-white`}>
                   {category.icon}
                 </div>
-                <Badge
-                  className={getPopularityBadge(category.popularity).color}
-                >
-                  {getPopularityBadge(category.popularity).text}
-                </Badge>
-              </div>
-              <CardTitle className="text-lg">
-                <div>
-                  {category.title}
-                  <div className="text-sm font-normal text-muted-foreground mt-1">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-[#E8EDDF] font-semibold truncate">
+                    {category.title}
+                  </h3>
+                  <p className="text-xs text-[#CFDBD5]/60">
                     {category.titleBengali}
-                  </div>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                {category.description}
-              </p>
-
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center text-muted-foreground">
-                    <Clock className="h-4 w-4 mr-1" />
-                    {t("category.processingTime")}
-                  </span>
-                  <span className="font-medium">{category.estimatedTime}</span>
-                </div>
-
-                <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center text-muted-foreground">
-                    <DollarSign className="h-4 w-4 mr-1" />
-                    {t("category.officialFee")}
-                  </span>
-                  <span className="font-medium">{category.officialFee}</span>
-                </div>
-
-                <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center text-muted-foreground">
-                    <FileText className="h-4 w-4 mr-1" />
-                    {t("category.stepsRequired")}
-                  </span>
-                  <span className="font-medium">
-                    {category.steps} {t("category.steps")}
-                  </span>
+                  </p>
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t">
-                <p className="text-xs text-muted-foreground mb-2">
-                  {t("category.requiredDocuments")}
-                </p>
-                <div className="flex flex-wrap gap-1">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-[#F5CB5C]" />
+                  <span className="text-sm text-[#CFDBD5]">{category.estimatedTime}</span>
+                </div>
+                <span className="text-[#F5CB5C] font-bold">{category.officialFee}</span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex gap-1">
                   {category.documents.slice(0, 2).map((doc, index) => (
-                    <Badge key={index} variant="outline" className="text-xs">
-                      {doc}
-                    </Badge>
+                    <span
+                      key={index}
+                      className="text-xs bg-[#242423] text-[#CFDBD5]/80 px-2 py-1 rounded-lg"
+                    >
+                      {doc.length > 10 ? doc.substring(0, 10) + "..." : doc}
+                    </span>
                   ))}
-                  {category.documents.length > 2 && (
-                    <Badge variant="outline" className="text-xs">
-                      +{category.documents.length - 2} {t("category.more")}
-                    </Badge>
-                  )}
                 </div>
+                <ArrowRight className="h-5 w-5 text-[#F5CB5C]" />
               </div>
-
-              <Button
-                className="w-full mt-4"
-                variant="outline"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/guide/${category.id}`);
-                }}
-              >
-                {t("category.viewDetails")}
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </Button>
             </CardContent>
           </Card>
         ))}
@@ -348,11 +312,11 @@ const DocumentCategoryGrid = ({
 
       {filteredCategories.length === 0 && (
         <div className="text-center py-12">
-          <Building className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-muted-foreground mb-2">
+          <Building className="h-12 w-12 text-[#CFDBD5]/30 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-[#CFDBD5]/60 mb-2">
             No documents found
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-[#CFDBD5]/40">
             Try adjusting your filter to see more options.
           </p>
         </div>

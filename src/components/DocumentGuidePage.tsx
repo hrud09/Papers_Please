@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
   ArrowLeft,
   FileText,
@@ -17,6 +20,10 @@ import {
   Building,
   Phone,
   Globe,
+  MessageCircle,
+  Send,
+  User,
+  Mail,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -243,15 +250,15 @@ const DocumentGuidePage: React.FC = () => {
 
   if (!guide) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
-        <Card className="max-w-md mx-auto">
+      <div className="min-h-screen bg-[#242423] flex items-center justify-center pb-24">
+        <Card className="max-w-md mx-auto bg-[#333533] border-0 rounded-2xl">
           <CardContent className="p-8 text-center">
             <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">Document Not Found</h2>
-            <p className="text-muted-foreground mb-4">
+            <h2 className="text-xl font-semibold mb-2 text-[#E8EDDF]">Document Not Found</h2>
+            <p className="text-[#CFDBD5]/70 mb-4">
               The requested document guide could not be found.
             </p>
-            <Button onClick={() => navigate("/")}>
+            <Button onClick={() => navigate("/")} className="bg-[#F5CB5C] text-[#242423] hover:bg-[#F5CB5C]/90 rounded-xl">
               <ArrowLeft className="h-4 w-4 mr-2" />
               {t("guide.backToHome")}
             </Button>
@@ -262,310 +269,354 @@ const DocumentGuidePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <div className="min-h-screen bg-[#242423] pb-24 md:pb-8">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center h-16">
-            <Button
-              variant="ghost"
-              onClick={() => navigate("/")}
-              className="mr-4"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              {t("guide.backToHome")}
-            </Button>
-            <div className="flex items-center space-x-3">
-              <div className="bg-primary text-white p-2 rounded-lg">
-                <FileText className="h-6 w-6" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-primary">
-                  {guide.title}
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  {guide.titleBengali}
-                </p>
-              </div>
+      <header className="px-4 pt-6 pb-4 md:pt-20">
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/")}
+            className="p-2.5 bg-[#333533] rounded-xl text-[#CFDBD5] hover:bg-[#333533]/80 active:scale-95 transition-transform"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-[#F5CB5C] rounded-xl">
+              <FileText className="h-5 w-5 text-[#242423]" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-[#E8EDDF]">
+                {guide.title}
+              </h1>
+              <p className="text-xs text-[#CFDBD5]/60">
+                {guide.titleBengali}
+              </p>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              {guide.title} Guide
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              {guide.description}
-            </p>
-          </div>
-
-          {/* Quick Info Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <Card>
-              <CardContent className="p-4 text-center">
-                <DollarSign className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                <h3 className="font-semibold mb-1">{t("guide.officialFee")}</h3>
-                <p className="text-lg font-bold text-green-600">
-                  {guide.officialFee}
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4 text-center">
-                <Clock className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                <h3 className="font-semibold mb-1">
-                  {t("guide.processingTime")}
-                </h3>
-                <p className="text-lg font-bold text-blue-600">
-                  {guide.processingTime}
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4 text-center">
-                <FileText className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                <h3 className="font-semibold mb-1">
-                  {t("guide.requiredDocuments")}
-                </h3>
-                <p className="text-lg font-bold text-purple-600">
-                  {guide.requiredDocuments.length} items
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+      {/* Quick Info Cards */}
+      <section className="px-4 mb-6">
+        <div className="grid grid-cols-3 gap-3 sm:flex sm:overflow-x-auto pb-2 scrollbar-hide">
+          <Card className="sm:min-w-[140px] bg-[#333533] border-0 rounded-2xl active:scale-95 transition-transform">
+            <CardContent className="p-3 sm:p-4 text-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#F5CB5C]/10 rounded-xl flex items-center justify-center mx-auto mb-2">
+                <DollarSign className="h-5 w-5 sm:h-6 sm:w-6 text-[#F5CB5C]" />
+              </div>
+              <p className="text-[10px] sm:text-xs text-[#CFDBD5]/60 mb-0.5">{t("guide.officialFee")}</p>
+              <p className="text-sm sm:text-lg font-bold text-[#F5CB5C]">
+                {guide.officialFee}
+              </p>
+            </CardContent>
+          </Card>
+          <Card className="sm:min-w-[140px] bg-[#333533] border-0 rounded-2xl active:scale-95 transition-transform">
+            <CardContent className="p-3 sm:p-4 text-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-500/10 rounded-xl flex items-center justify-center mx-auto mb-2">
+                <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-green-500" />
+              </div>
+              <p className="text-[10px] sm:text-xs text-[#CFDBD5]/60 mb-0.5">{t("guide.processingTime")}</p>
+              <p className="text-sm sm:text-lg font-bold text-green-500">
+                {guide.processingTime}
+              </p>
+            </CardContent>
+          </Card>
+          <Card className="sm:min-w-[140px] bg-[#333533] border-0 rounded-2xl active:scale-95 transition-transform">
+            <CardContent className="p-3 sm:p-4 text-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mx-auto mb-2">
+                <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-blue-500" />
+              </div>
+              <p className="text-[10px] sm:text-xs text-[#CFDBD5]/60 mb-0.5">{t("guide.requiredDocuments")}</p>
+              <p className="text-sm sm:text-lg font-bold text-blue-500">
+                {guide.requiredDocuments.length}
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
       {/* Main Content */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-6 mb-8">
-              <TabsTrigger value="overview">{t("guide.overview")}</TabsTrigger>
-              <TabsTrigger value="procedure">
-                {t("guide.procedure")}
-              </TabsTrigger>
-              <TabsTrigger value="offices">{t("guide.offices")}</TabsTrigger>
-              <TabsTrigger value="fees">{t("guide.fees")}</TabsTrigger>
-              <TabsTrigger value="faqs">{t("guide.faqs")}</TabsTrigger>
-              <TabsTrigger value="tips">{t("guide.tips")}</TabsTrigger>
-            </TabsList>
+      <section className="px-4">
+        <Tabs defaultValue="overview" className="w-full">
+          <TabsList className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide bg-transparent mb-4">
+            <TabsTrigger value="overview" className="rounded-full px-4 py-2 bg-[#333533] text-[#CFDBD5] text-sm font-medium data-[state=active]:bg-[#F5CB5C] data-[state=active]:text-[#242423] transition-all active:scale-95 whitespace-nowrap">{t("guide.overview")}</TabsTrigger>
+            <TabsTrigger value="procedure" className="rounded-full px-4 py-2 bg-[#333533] text-[#CFDBD5] text-sm font-medium data-[state=active]:bg-[#F5CB5C] data-[state=active]:text-[#242423] transition-all active:scale-95 whitespace-nowrap">{t("guide.procedure")}</TabsTrigger>
+            <TabsTrigger value="offices" className="rounded-full px-4 py-2 bg-[#333533] text-[#CFDBD5] text-sm font-medium data-[state=active]:bg-[#F5CB5C] data-[state=active]:text-[#242423] transition-all active:scale-95 whitespace-nowrap">{t("guide.offices")}</TabsTrigger>
+            <TabsTrigger value="faqs" className="rounded-full px-4 py-2 bg-[#333533] text-[#CFDBD5] text-sm font-medium data-[state=active]:bg-[#F5CB5C] data-[state=active]:text-[#242423] transition-all active:scale-95 whitespace-nowrap">{t("guide.faqs")}</TabsTrigger>
+          </TabsList>
 
-            <TabsContent value="overview">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <AlertCircle className="h-5 w-5 mr-2 text-blue-600" />
-                      {t("guide.importance")}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">{guide.importance}</p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <FileText className="h-5 w-5 mr-2 text-green-600" />
-                      {t("guide.requiredDocuments")}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {guide.requiredDocuments.map((doc, index) => (
-                        <li key={index} className="flex items-center">
-                          <CheckCircle2 className="h-4 w-4 text-green-600 mr-2" />
-                          {doc}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="procedure">
-              <div className="space-y-6">
-                {guide.procedure.map((step, index) => (
-                  <Card key={index}>
-                    <CardHeader>
-                      <CardTitle className="flex items-center">
-                        <div className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">
-                          {step.step}
-                        </div>
-                        {step.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground mb-3">
-                        {step.description}
-                      </p>
-                      {step.tips && (
-                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                          <div className="flex items-start">
-                            <Lightbulb className="h-4 w-4 text-yellow-600 mr-2 mt-0.5" />
-                            <p className="text-sm text-yellow-800">
-                              {step.tips}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="offices">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {guide.offices.map((office, index) => (
-                  <Card key={index}>
-                    <CardHeader>
-                      <CardTitle className="flex items-center text-lg">
-                        <Building className="h-5 w-5 mr-2 text-blue-600" />
-                        {office.name}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="flex items-start">
-                        <MapPin className="h-4 w-4 text-gray-500 mr-2 mt-1" />
-                        <p className="text-sm text-muted-foreground">
-                          {office.address}
-                        </p>
-                      </div>
-                      {office.phone && (
-                        <div className="flex items-center">
-                          <Phone className="h-4 w-4 text-gray-500 mr-2" />
-                          <p className="text-sm text-muted-foreground">
-                            {office.phone}
-                          </p>
-                        </div>
-                      )}
-                      <div className="flex items-center">
-                        <Clock className="h-4 w-4 text-gray-500 mr-2" />
-                        <p className="text-sm text-muted-foreground">
-                          {office.hours}
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="fees">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Fee Structure & Processing Time</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                      <h3 className="font-semibold mb-4 flex items-center">
-                        <DollarSign className="h-5 w-5 mr-2 text-green-600" />
-                        {t("guide.officialFee")}
-                      </h3>
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                        <p className="text-2xl font-bold text-green-700">
-                          {guide.officialFee}
-                        </p>
-                        <p className="text-sm text-green-600 mt-1">
-                          Official government fee only
-                        </p>
-                      </div>
+          <TabsContent value="overview">
+            <div className="space-y-4">
+              <Card className="bg-[#333533] border-0 rounded-2xl active:scale-[0.99] transition-transform">
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-[#F5CB5C]/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <AlertCircle className="h-5 w-5 text-[#F5CB5C]" />
                     </div>
                     <div>
-                      <h3 className="font-semibold mb-4 flex items-center">
-                        <Clock className="h-5 w-5 mr-2 text-blue-600" />
-                        {t("guide.processingTime")}
-                      </h3>
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <p className="text-2xl font-bold text-blue-700">
-                          {guide.processingTime}
-                        </p>
-                        <p className="text-sm text-blue-600 mt-1">
-                          Standard processing time
-                        </p>
-                      </div>
+                      <h3 className="text-[#E8EDDF] font-semibold mb-1">{t("guide.importance")}</h3>
+                      <p className="text-[#CFDBD5]/70 text-sm leading-relaxed">{guide.importance}</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
-            </TabsContent>
 
-            <TabsContent value="faqs">
-              <div className="space-y-4">
-                {guide.faqs.map((faq, index) => (
-                  <Card key={index}>
-                    <CardHeader>
-                      <CardTitle className="flex items-start text-lg">
-                        <HelpCircle className="h-5 w-5 mr-2 text-blue-600 mt-1" />
-                        {faq.question}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">{faq.answer}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
+              <Card className="bg-[#333533] border-0 rounded-2xl">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-green-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <FileText className="h-5 w-5 text-green-500" />
+                    </div>
+                    <h3 className="text-[#E8EDDF] font-semibold">{t("guide.requiredDocuments")}</h3>
+                  </div>
+                  <div className="space-y-2 pl-1">
+                    {guide.requiredDocuments.map((doc, index) => (
+                      <div key={index} className="flex items-center gap-3 p-2 bg-[#242423] rounded-xl">
+                        <CheckCircle2 className="h-4 w-4 text-green-500 flex-shrink-0" />
+                        <span className="text-[#CFDBD5]/80 text-sm">{doc}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
 
-            <TabsContent value="tips">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Lightbulb className="h-5 w-5 mr-2 text-yellow-600" />
-                      Helpful Tips
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-3">
-                      {guide.tips.map((tip, index) => (
-                        <li key={index} className="flex items-start">
-                          <CheckCircle2 className="h-4 w-4 text-green-600 mr-2 mt-1" />
-                          <span className="text-sm">{tip}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <FileText className="h-5 w-5 mr-2 text-purple-600" />
-                      Related Documents
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2">
-                      {guide.relatedDocuments.map((doc, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="text-sm"
-                        >
-                          {doc}
-                        </Badge>
-                      ))}
+          <TabsContent value="procedure">
+            <div className="space-y-3">
+              {guide.procedure.map((step, index) => (
+                <Card key={index} className="bg-[#333533] border-0 rounded-2xl active:scale-[0.99] transition-transform overflow-hidden">
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="bg-[#F5CB5C] text-[#242423] rounded-xl w-10 h-10 flex items-center justify-center font-bold flex-shrink-0 text-lg">
+                        {step.step}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-[#E8EDDF] mb-1.5">{step.title}</h3>
+                        <p className="text-[#CFDBD5]/70 text-sm leading-relaxed mb-2">
+                          {step.description}
+                        </p>
+                        {step.tips && (
+                          <div className="bg-[#242423] rounded-xl p-3 mt-3 border border-[#F5CB5C]/20">
+                            <div className="flex items-start gap-2">
+                              <div className="w-6 h-6 bg-[#F5CB5C]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <Lightbulb className="h-3.5 w-3.5 text-[#F5CB5C]" />
+                              </div>
+                              <p className="text-xs text-[#CFDBD5]/70 leading-relaxed">
+                                {step.tips}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="offices">
+            <div className="space-y-3">
+              {guide.offices.map((office, index) => (
+                <Card key={index} className="bg-[#333533] border-0 rounded-2xl active:scale-[0.99] transition-transform">
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 bg-[#F5CB5C]/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <Building className="h-5 w-5 text-[#F5CB5C]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-[#E8EDDF] mb-2">{office.name}</h3>
+                        <div className="space-y-2">
+                          <div className="flex items-start gap-2 p-2 bg-[#242423] rounded-xl">
+                            <MapPin className="h-4 w-4 text-[#CFDBD5]/50 mt-0.5 flex-shrink-0" />
+                            <p className="text-[#CFDBD5]/70 text-sm">{office.address}</p>
+                          </div>
+                          {office.phone && (
+                            <div className="flex items-center gap-2 p-2 bg-[#242423] rounded-xl">
+                              <Phone className="h-4 w-4 text-[#CFDBD5]/50" />
+                              <p className="text-[#CFDBD5]/70 text-sm">{office.phone}</p>
+                            </div>
+                          )}
+                          <div className="flex items-center gap-2 p-2 bg-[#242423] rounded-xl">
+                            <Clock className="h-4 w-4 text-[#CFDBD5]/50" />
+                            <p className="text-[#CFDBD5]/70 text-sm">{office.hours}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="faqs">
+            <div className="space-y-3">
+              {guide.faqs.map((faq, index) => (
+                <Card key={index} className="bg-[#333533] border-0 rounded-2xl active:scale-[0.99] transition-transform">
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 bg-[#F5CB5C]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <HelpCircle className="h-4 w-4 text-[#F5CB5C]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-[#E8EDDF] text-sm mb-1.5">{faq.question}</h3>
+                        <p className="text-[#CFDBD5]/70 text-sm leading-relaxed">{faq.answer}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
+      </section>
+
+      {/* Consultancy Form Section */}
+      <section className="px-4 mt-6 mb-8">
+        <Card className="bg-[#333533] border-0 rounded-2xl overflow-hidden">
+          <div className="h-1.5 bg-gradient-to-r from-[#F5CB5C] to-[#F5CB5C]/50" />
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-12 h-12 bg-[#F5CB5C] rounded-xl flex items-center justify-center flex-shrink-0">
+                <MessageCircle className="h-6 w-6 text-[#242423]" />
               </div>
-            </TabsContent>
-          </Tabs>
-        </div>
+              <div>
+                <h3 className="text-base sm:text-lg font-bold text-[#E8EDDF]">Need Help?</h3>
+                <p className="text-xs text-[#CFDBD5]/60">Get 1-on-1 expert consultancy</p>
+              </div>
+            </div>
+
+            <ConsultancyForm documentTitle={guide.title} />
+          </CardContent>
+        </Card>
       </section>
     </div>
+  );
+};
+
+const ConsultancyForm = ({ documentTitle }: { documentTitle: string }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    issue: "",
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => {
+      setSubmitted(false);
+      setFormData({ name: "", email: "", phone: "", issue: "" });
+    }, 3000);
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  if (submitted) {
+    return (
+      <div className="text-center py-8 animate-slide-up">
+        <div className="w-16 h-16 bg-green-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <CheckCircle2 className="h-8 w-8 text-green-500" />
+        </div>
+        <h4 className="text-[#E8EDDF] font-semibold text-lg mb-2">Request Submitted!</h4>
+        <p className="text-[#CFDBD5]/60 text-sm">
+          We'll get back to you within 24 hours.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-1.5">
+        <Label htmlFor="name" className="text-[#CFDBD5]/80 text-sm flex items-center gap-2">
+          <User className="h-3.5 w-3.5 text-[#F5CB5C]" />
+          Your Name
+        </Label>
+        <Input
+          id="name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          placeholder="Enter your full name"
+          className="bg-[#242423] border-0 text-[#E8EDDF] placeholder:text-[#CFDBD5]/30 rounded-xl h-12 focus:ring-2 focus:ring-[#F5CB5C]/50"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="space-y-1.5">
+          <Label htmlFor="email" className="text-[#CFDBD5]/80 text-sm flex items-center gap-2">
+            <Mail className="h-3.5 w-3.5 text-[#F5CB5C]" />
+            Email
+          </Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            placeholder="your@email.com"
+            className="bg-[#242423] border-0 text-[#E8EDDF] placeholder:text-[#CFDBD5]/30 rounded-xl h-12 focus:ring-2 focus:ring-[#F5CB5C]/50"
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="phone" className="text-[#CFDBD5]/80 text-sm flex items-center gap-2">
+            <Phone className="h-3.5 w-3.5 text-[#F5CB5C]" />
+            Phone
+          </Label>
+          <Input
+            id="phone"
+            name="phone"
+            type="tel"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+            placeholder="+880 1XXX XXXXXX"
+            className="bg-[#242423] border-0 text-[#E8EDDF] placeholder:text-[#CFDBD5]/30 rounded-xl h-12 focus:ring-2 focus:ring-[#F5CB5C]/50"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="issue" className="text-[#CFDBD5]/80 text-sm flex items-center gap-2">
+          <MessageCircle className="h-3.5 w-3.5 text-[#F5CB5C]" />
+          Describe Your Issue
+        </Label>
+        <Textarea
+          id="issue"
+          name="issue"
+          value={formData.issue}
+          onChange={handleChange}
+          required
+          placeholder={`Tell us about your ${documentTitle} related issue...`}
+          rows={3}
+          className="bg-[#242423] border-0 text-[#E8EDDF] placeholder:text-[#CFDBD5]/30 rounded-xl focus:ring-2 focus:ring-[#F5CB5C]/50 resize-none"
+        />
+      </div>
+
+      <Button
+        type="submit"
+        className="w-full bg-[#F5CB5C] text-[#242423] hover:bg-[#F5CB5C]/90 active:scale-[0.98] rounded-xl h-12 font-semibold text-sm transition-transform"
+      >
+        <Send className="h-4 w-4 mr-2" />
+        Request Consultation
+      </Button>
+
+      <p className="text-[10px] text-[#CFDBD5]/50 text-center pt-1">
+        ✨ Free consultation • Response within 24 hours
+      </p>
+    </form>
   );
 };
 
