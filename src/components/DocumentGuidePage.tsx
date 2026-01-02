@@ -1,23 +1,7 @@
-import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  ArrowLeft,
-  FileText,
-  Clock,
-  DollarSign,
-  MapPin,
-  CheckCircle2,
-  AlertCircle,
-  HelpCircle,
-  Lightbulb,
-  Building,
-  Phone,
-  Globe,
-} from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface DocumentGuideData {
@@ -235,8 +219,10 @@ const documentGuides: Record<string, DocumentGuideData> = {
 };
 
 const DocumentGuidePage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  // derive id from URL path (assumes last segment is the guide id)
+  const pathSegments = typeof window !== "undefined" ? window.location.pathname.split("/").filter(Boolean) : [];
+  const id = pathSegments.length ? pathSegments[pathSegments.length - 1] : undefined;
+
   const { t } = useLanguage();
 
   const guide = id ? documentGuides[id] : null;
@@ -246,13 +232,13 @@ const DocumentGuidePage: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center">
         <Card className="max-w-md mx-auto">
           <CardContent className="p-8 text-center">
-            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <div className="h-12 w-12 text-red-500 mx-auto mb-4 text-4xl">⚠️</div>
             <h2 className="text-xl font-semibold mb-2">Document Not Found</h2>
             <p className="text-muted-foreground mb-4">
               The requested document guide could not be found.
             </p>
-            <Button onClick={() => navigate("/")}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
+            <Button onClick={() => (window.location.href = "/") }>
+              <span className="mr-2">←</span>
               {t("guide.backToHome")}
             </Button>
           </CardContent>
@@ -267,18 +253,12 @@ const DocumentGuidePage: React.FC = () => {
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-16">
-            <Button
-              variant="ghost"
-              onClick={() => navigate("/")}
-              className="mr-4"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
+            <Button onClick={() => (window.location.href = "/")} className="mr-4">
+              <span className="mr-2">←</span>
               {t("guide.backToHome")}
             </Button>
             <div className="flex items-center space-x-3">
-              <div className="bg-primary text-white p-2 rounded-lg">
-                <FileText className="h-6 w-6" />
-              </div>
+              <div className="bg-primary text-white p-2 rounded-lg text-white">📄</div>
               <div>
                 <h1 className="text-xl font-bold text-primary">
                   {guide.title}
@@ -308,7 +288,7 @@ const DocumentGuidePage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <Card>
               <CardContent className="p-4 text-center">
-                <DollarSign className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                <div className="mx-auto mb-2 text-2xl">💲</div>
                 <h3 className="font-semibold mb-1">{t("guide.officialFee")}</h3>
                 <p className="text-lg font-bold text-green-600">
                   {guide.officialFee}
@@ -317,7 +297,7 @@ const DocumentGuidePage: React.FC = () => {
             </Card>
             <Card>
               <CardContent className="p-4 text-center">
-                <Clock className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                <div className="mx-auto mb-2 text-2xl">⏱️</div>
                 <h3 className="font-semibold mb-1">
                   {t("guide.processingTime")}
                 </h3>
@@ -328,7 +308,7 @@ const DocumentGuidePage: React.FC = () => {
             </Card>
             <Card>
               <CardContent className="p-4 text-center">
-                <FileText className="h-8 w-8 text-purple-600 mx-auto mb-2" />
+                <div className="mx-auto mb-2 text-2xl">📄</div>
                 <h3 className="font-semibold mb-1">
                   {t("guide.requiredDocuments")}
                 </h3>
@@ -341,228 +321,201 @@ const DocumentGuidePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Main Content */}
+      {/* Main Content - single page (no tabs) */}
       <section className="py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-6 mb-8">
-              <TabsTrigger value="overview">{t("guide.overview")}</TabsTrigger>
-              <TabsTrigger value="procedure">
-                {t("guide.procedure")}
-              </TabsTrigger>
-              <TabsTrigger value="offices">{t("guide.offices")}</TabsTrigger>
-              <TabsTrigger value="fees">{t("guide.fees")}</TabsTrigger>
-              <TabsTrigger value="faqs">{t("guide.faqs")}</TabsTrigger>
-              <TabsTrigger value="tips">{t("guide.tips")}</TabsTrigger>
-            </TabsList>
+        <div className="max-w-7xl mx-auto space-y-8">
+          {/* Overview */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <span className="h-5 w-5 mr-2 text-blue-600">⚠️</span>
+                  {t("guide.importance")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">{guide.importance}</p>
+              </CardContent>
+            </Card>
 
-            <TabsContent value="overview">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <span className="h-5 w-5 mr-2 text-green-600">📄</span>
+                  {t("guide.requiredDocuments")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2">
+                  {guide.requiredDocuments.map((doc, index) => (
+                    <li key={index} className="flex items-center">
+                      <span className="h-4 w-4 text-green-600 mr-2">✅</span>
+                      {doc}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Procedure */}
+          <div>
+            <h2 className="text-2xl font-bold mb-4 flex items-center">
+              <span className="h-6 w-6 mr-2 text-primary">📄</span> Procedure
+            </h2>
+            <div className="space-y-6">
+              {guide.procedure.map((step, index) => (
+                <Card key={index}>
                   <CardHeader>
                     <CardTitle className="flex items-center">
-                      <AlertCircle className="h-5 w-5 mr-2 text-blue-600" />
-                      {t("guide.importance")}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">{guide.importance}</p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <FileText className="h-5 w-5 mr-2 text-green-600" />
-                      {t("guide.requiredDocuments")}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {guide.requiredDocuments.map((doc, index) => (
-                        <li key={index} className="flex items-center">
-                          <CheckCircle2 className="h-4 w-4 text-green-600 mr-2" />
-                          {doc}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="procedure">
-              <div className="space-y-6">
-                {guide.procedure.map((step, index) => (
-                  <Card key={index}>
-                    <CardHeader>
-                      <CardTitle className="flex items-center">
-                        <div className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">
-                          {step.step}
-                        </div>
-                        {step.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground mb-3">
-                        {step.description}
-                      </p>
-                      {step.tips && (
-                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                          <div className="flex items-start">
-                            <Lightbulb className="h-4 w-4 text-yellow-600 mr-2 mt-0.5" />
-                            <p className="text-sm text-yellow-800">
-                              {step.tips}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="offices">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {guide.offices.map((office, index) => (
-                  <Card key={index}>
-                    <CardHeader>
-                      <CardTitle className="flex items-center text-lg">
-                        <Building className="h-5 w-5 mr-2 text-blue-600" />
-                        {office.name}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="flex items-start">
-                        <MapPin className="h-4 w-4 text-gray-500 mr-2 mt-1" />
-                        <p className="text-sm text-muted-foreground">
-                          {office.address}
-                        </p>
+                      <div className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">
+                        {step.step}
                       </div>
-                      {office.phone && (
-                        <div className="flex items-center">
-                          <Phone className="h-4 w-4 text-gray-500 mr-2" />
-                          <p className="text-sm text-muted-foreground">
-                            {office.phone}
-                          </p>
+                      {step.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-3">
+                      {step.description}
+                    </p>
+                    {step.tips && (
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                        <div className="flex items-start">
+                          <span className="h-4 w-4 text-yellow-600 mr-2 mt-0.5">💡</span>
+                          <p className="text-sm text-yellow-800">{step.tips}</p>
                         </div>
-                      )}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Offices */}
+          <div>
+            <h2 className="text-2xl font-bold mb-4 flex items-center">
+              <span className="h-6 w-6 mr-2 text-blue-600">🏢</span> Offices
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {guide.offices.map((office, index) => (
+                <Card key={index}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center text-lg">
+                      <span className="h-5 w-5 mr-2 text-blue-600">🏢</span>
+                      {office.name}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-start">
+                      <span className="h-4 w-4 text-gray-500 mr-2 mt-1">📍</span>
+                      <p className="text-sm text-muted-foreground">{office.address}</p>
+                    </div>
+                    {office.phone && (
                       <div className="flex items-center">
-                        <Clock className="h-4 w-4 text-gray-500 mr-2" />
-                        <p className="text-sm text-muted-foreground">
-                          {office.hours}
-                        </p>
+                        <span className="h-4 w-4 text-gray-500 mr-2">📞</span>
+                        <p className="text-sm text-muted-foreground">{office.phone}</p>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
+                    )}
+                    <div className="flex items-center">
+                      <span className="h-4 w-4 text-gray-500 mr-2">⏱️</span>
+                      <p className="text-sm text-muted-foreground">{office.hours}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
 
-            <TabsContent value="fees">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Fee Structure & Processing Time</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                      <h3 className="font-semibold mb-4 flex items-center">
-                        <DollarSign className="h-5 w-5 mr-2 text-green-600" />
-                        {t("guide.officialFee")}
-                      </h3>
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                        <p className="text-2xl font-bold text-green-700">
-                          {guide.officialFee}
-                        </p>
-                        <p className="text-sm text-green-600 mt-1">
-                          Official government fee only
-                        </p>
-                      </div>
+          {/* Fees & Processing Time */}
+          <div>
+            <h2 className="text-2xl font-bold mb-4 flex items-center">
+              <span className="h-6 w-6 mr-2 text-green-600">💲</span> Fees & Processing Time
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="font-semibold mb-4 flex items-center">
+                  <span className="h-5 w-5 mr-2 text-green-600">💲</span> {t("guide.officialFee")}
+                </h3>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <p className="text-2xl font-bold text-green-700">{guide.officialFee}</p>
+                  <p className="text-sm text-green-600 mt-1">Official government fee only</p>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-4 flex items-center">
+                  <span className="h-5 w-5 mr-2 text-blue-600">⏱️</span> {t("guide.processingTime")}
+                </h3>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="text-2xl font-bold text-blue-700">{guide.processingTime}</p>
+                  <p className="text-sm text-blue-600 mt-1">Standard processing time</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* FAQs */}
+          <div>
+            <h2 className="text-2xl font-bold mb-4 flex items-center">
+              <span className="h-6 w-6 mr-2 text-blue-600">❓</span> Frequently Asked Questions
+            </h2>
+            <div className="space-y-4">
+              {guide.faqs.map((faq, index) => (
+                <Card key={index}>
+                  <CardHeader>
+                    <CardTitle className="flex items-start text-lg">
+                      <span className="h-5 w-5 mr-2 text-blue-600 mt-1">❓</span>
+                      {faq.question}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">{faq.answer}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Tips & Related Documents */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <span className="h-5 w-5 mr-2 text-yellow-600">💡</span>
+                  Helpful Tips
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3">
+                  {guide.tips.map((tip, index) => (
+                    <li key={index} className="flex items-start">
+                      <span className="h-4 w-4 text-green-600 mr-2 mt-1">✅</span>
+                      <span className="text-sm">{tip}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <span className="h-5 w-5 mr-2 text-purple-600">📄</span>
+                  Related Documents
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {guide.relatedDocuments.map((doc, index) => (
+                    <div key={index}>
+                      <Badge className="text-sm">{doc}</Badge>
                     </div>
-                    <div>
-                      <h3 className="font-semibold mb-4 flex items-center">
-                        <Clock className="h-5 w-5 mr-2 text-blue-600" />
-                        {t("guide.processingTime")}
-                      </h3>
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <p className="text-2xl font-bold text-blue-700">
-                          {guide.processingTime}
-                        </p>
-                        <p className="text-sm text-blue-600 mt-1">
-                          Standard processing time
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  ))}
+                </div>
                 </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="faqs">
-              <div className="space-y-4">
-                {guide.faqs.map((faq, index) => (
-                  <Card key={index}>
-                    <CardHeader>
-                      <CardTitle className="flex items-start text-lg">
-                        <HelpCircle className="h-5 w-5 mr-2 text-blue-600 mt-1" />
-                        {faq.question}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">{faq.answer}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="tips">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Lightbulb className="h-5 w-5 mr-2 text-yellow-600" />
-                      Helpful Tips
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-3">
-                      {guide.tips.map((tip, index) => (
-                        <li key={index} className="flex items-start">
-                          <CheckCircle2 className="h-4 w-4 text-green-600 mr-2 mt-1" />
-                          <span className="text-sm">{tip}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <FileText className="h-5 w-5 mr-2 text-purple-600" />
-                      Related Documents
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2">
-                      {guide.relatedDocuments.map((doc, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="text-sm"
-                        >
-                          {doc}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-          </Tabs>
+            </Card>
+          </div>
         </div>
       </section>
     </div>
